@@ -553,7 +553,7 @@ export default function CanvasPanel() {
                   }`}
                   style={{ 
                     backgroundColor: block.id === activeBlockId ? config.color : 'var(--color-gray-100)',
-                    ringColor: config.color,
+                    ['--tw-ring-color' as any]: config.color,
                   }}
                   title={`${config.label}: ${block.title}`}
                 />
