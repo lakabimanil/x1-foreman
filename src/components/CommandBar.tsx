@@ -2,8 +2,15 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Sparkles, ChevronUp, ChevronDown, X } from 'lucide-react';
+import { Send, ChevronUp, ChevronDown, X } from 'lucide-react';
 import { useOnboardingStore } from '@/store/useOnboardingStore';
+
+const X1Logo = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
+    <path d="M5 6L11 18M11 6L5 18" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M17 6V18M15 8L17 6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 export default function CommandBar() {
   const [input, setInput] = useState('');
@@ -56,8 +63,8 @@ export default function CommandBar() {
               <div className="h-full overflow-y-auto p-3 space-y-3">
                 {messages.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-center py-8">
-                    <Sparkles className="w-8 h-8 text-[var(--color-accent-blue)] mb-3" />
-                    <p className="text-sm text-[var(--color-gray-75)]">Start a conversation with the Foreman</p>
+                    <X1Logo className="w-8 h-8 text-[var(--color-accent-blue)] mb-3" />
+                    <p className="text-sm text-[var(--color-gray-75)]">Start a conversation with x1</p>
                     <p className="text-xs text-[var(--color-gray-100)] mt-1">Ask to add blocks, customize screens, etc.</p>
                   </div>
                 ) : (
@@ -77,8 +84,8 @@ export default function CommandBar() {
                       >
                         {message.role === 'foreman' && (
                           <div className="flex items-center gap-1.5 mb-1">
-                            <Sparkles className="w-3 h-3 text-[var(--color-accent-yellow)]" />
-                            <span className="text-[10px] font-medium text-[var(--color-gray-75)]">Foreman</span>
+                            <X1Logo className="w-3 h-3 text-[var(--color-accent-yellow)]" />
+                            <span className="text-[10px] font-medium text-[var(--color-gray-75)]">x1</span>
                           </div>
                         )}
                         <p className="leading-relaxed">{message.content}</p>
@@ -98,7 +105,7 @@ export default function CommandBar() {
                     >
                       <div className="bg-[var(--color-gray-125)] px-3 py-2 rounded-xl rounded-bl-sm">
                         <div className="flex items-center gap-1.5">
-                          <Sparkles className="w-3 h-3 text-[var(--color-accent-yellow)]" />
+                          <X1Logo className="w-3 h-3 text-[var(--color-accent-yellow)]" />
                           <div className="flex gap-1">
                             <motion.span
                               animate={{ opacity: [0.4, 1, 0.4] }}
@@ -147,7 +154,7 @@ export default function CommandBar() {
               </button>
 
               {/* Sparkle Icon */}
-              <Sparkles className="w-4 h-4 text-[var(--color-accent-blue)] flex-shrink-0" />
+              <X1Logo className="w-4 h-4 text-[var(--color-accent-blue)] flex-shrink-0" />
               
               {/* Input */}
               <input
@@ -155,7 +162,7 @@ export default function CommandBar() {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask the Foreman..."
+                placeholder="Ask x1..."
                 className="flex-1 bg-transparent text-white placeholder-[var(--color-gray-100)] outline-none text-sm min-w-0"
                 disabled={isTyping}
               />
