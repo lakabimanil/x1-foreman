@@ -64,7 +64,7 @@ export default function CopyWorkspace() {
             {field.multiline ? (
               <textarea
                 value={field.value}
-                onChange={(e) => updateCopy(field.key as keyof typeof copy, e.target.value)}
+                onChange={(e) => updateCopy({ [field.key]: e.target.value })}
                 onFocus={() => setActiveField(field.key)}
                 onBlur={() => setActiveField(null)}
                 disabled={isLocked}
@@ -78,7 +78,7 @@ export default function CopyWorkspace() {
               <input
                 type="text"
                 value={field.value}
-                onChange={(e) => updateCopy(field.key as keyof typeof copy, e.target.value)}
+                onChange={(e) => updateCopy({ [field.key]: e.target.value })}
                 onFocus={() => setActiveField(field.key)}
                 onBlur={() => setActiveField(null)}
                 disabled={isLocked}
