@@ -37,6 +37,248 @@ import {
 
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
+// Cal AI Screen SVG Assets - representing the onboarding flow screens
+// Using encodeURIComponent instead of btoa to handle Unicode characters properly
+const generateCalAIScreenSvg = (screenType: string): string => {
+  const svgs: Record<string, string> = {
+    splash: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 393 852" width="393" height="852">
+      <rect width="393" height="852" fill="#ffffff"/>
+      <text x="196" y="380" font-family="system-ui" font-size="56" fill="#111111" text-anchor="middle" font-weight="700">Cal AI</text>
+      <text x="196" y="430" font-family="system-ui" font-size="18" fill="#666666" text-anchor="middle">Calorie tracking made easy</text>
+      <circle cx="196" cy="280" r="50" fill="#10B981"/>
+      <circle cx="196" cy="280" r="30" fill="white" fill-opacity="0.3"/>
+      <rect x="186" y="260" width="20" height="30" rx="4" fill="white"/>
+      <rect x="182" y="295" width="28" height="4" rx="2" fill="white"/>
+    </svg>`,
+    welcome: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 393 852" width="393" height="852">
+      <rect width="393" height="852" fill="#ffffff"/>
+      <text x="196" y="200" font-family="system-ui" font-size="28" fill="#111111" text-anchor="middle" font-weight="700">Welcome to Cal AI</text>
+      <text x="196" y="240" font-family="system-ui" font-size="16" fill="#666666" text-anchor="middle">Calorie tracking made easy</text>
+      <rect x="46" y="300" width="300" height="200" rx="20" fill="#f3f4f6"/>
+      <circle cx="196" cy="400" r="40" fill="#EF4444"/>
+      <ellipse cx="196" cy="385" rx="5" ry="10" fill="#22C55E"/>
+      <rect x="46" y="700" width="300" height="56" rx="28" fill="#10B981"/>
+      <text x="196" y="736" font-family="system-ui" font-size="18" fill="white" text-anchor="middle" font-weight="600">Get Started</text>
+    </svg>`,
+    gender: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 393 852" width="393" height="852">
+      <rect width="393" height="852" fill="#ffffff"/>
+      <text x="196" y="150" font-family="system-ui" font-size="24" fill="#111111" text-anchor="middle" font-weight="700">What is your gender?</text>
+      <text x="196" y="185" font-family="system-ui" font-size="14" fill="#666666" text-anchor="middle">This helps us calculate your daily needs</text>
+      <rect x="46" y="250" width="300" height="80" rx="16" fill="#f3f4f6" stroke="#e5e7eb" stroke-width="2"/>
+      <circle cx="90" cy="290" r="20" fill="#3B82F6"/>
+      <text x="160" y="296" font-family="system-ui" font-size="18" fill="#111111" font-weight="500">Male</text>
+      <rect x="46" y="350" width="300" height="80" rx="16" fill="#f3f4f6" stroke="#e5e7eb" stroke-width="2"/>
+      <circle cx="90" cy="390" r="20" fill="#EC4899"/>
+      <text x="160" y="396" font-family="system-ui" font-size="18" fill="#111111" font-weight="500">Female</text>
+      <rect x="46" y="450" width="300" height="80" rx="16" fill="#f3f4f6" stroke="#e5e7eb" stroke-width="2"/>
+      <circle cx="90" cy="490" r="20" fill="#8B5CF6"/>
+      <text x="160" y="496" font-family="system-ui" font-size="18" fill="#111111" font-weight="500">Other</text>
+      <rect x="46" y="700" width="300" height="56" rx="28" fill="#10B981"/>
+      <text x="196" y="736" font-family="system-ui" font-size="18" fill="white" text-anchor="middle" font-weight="600">Continue</text>
+    </svg>`,
+    source: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 393 852" width="393" height="852">
+      <rect width="393" height="852" fill="#ffffff"/>
+      <text x="196" y="150" font-family="system-ui" font-size="22" fill="#111111" text-anchor="middle" font-weight="700">Where did you hear</text>
+      <text x="196" y="180" font-family="system-ui" font-size="22" fill="#111111" text-anchor="middle" font-weight="700">about us?</text>
+      <rect x="46" y="230" width="300" height="60" rx="12" fill="#f3f4f6"/>
+      <text x="196" y="268" font-family="system-ui" font-size="16" fill="#111111" text-anchor="middle">TikTok</text>
+      <rect x="46" y="310" width="300" height="60" rx="12" fill="#f3f4f6"/>
+      <text x="196" y="348" font-family="system-ui" font-size="16" fill="#111111" text-anchor="middle">Instagram</text>
+      <rect x="46" y="390" width="300" height="60" rx="12" fill="#f3f4f6"/>
+      <text x="196" y="428" font-family="system-ui" font-size="16" fill="#111111" text-anchor="middle">YouTube</text>
+      <rect x="46" y="470" width="300" height="60" rx="12" fill="#f3f4f6"/>
+      <text x="196" y="508" font-family="system-ui" font-size="16" fill="#111111" text-anchor="middle">Friend or Family</text>
+      <rect x="46" y="550" width="300" height="60" rx="12" fill="#f3f4f6"/>
+      <text x="196" y="588" font-family="system-ui" font-size="16" fill="#111111" text-anchor="middle">App Store</text>
+      <rect x="46" y="700" width="300" height="56" rx="28" fill="#10B981"/>
+      <text x="196" y="736" font-family="system-ui" font-size="18" fill="white" text-anchor="middle" font-weight="600">Continue</text>
+    </svg>`,
+    heightWeight: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 393 852" width="393" height="852">
+      <rect width="393" height="852" fill="#ffffff"/>
+      <text x="196" y="150" font-family="system-ui" font-size="24" fill="#111111" text-anchor="middle" font-weight="700">Your measurements</text>
+      <text x="196" y="185" font-family="system-ui" font-size="14" fill="#666666" text-anchor="middle">Help us personalize your calorie goal</text>
+      <text x="100" y="280" font-family="system-ui" font-size="16" fill="#666666" text-anchor="middle">Height</text>
+      <rect x="50" y="300" width="100" height="200" rx="16" fill="#f3f4f6"/>
+      <text x="100" y="400" font-family="system-ui" font-size="32" fill="#111111" text-anchor="middle" font-weight="700">5ft 10</text>
+      <text x="290" y="280" font-family="system-ui" font-size="16" fill="#666666" text-anchor="middle">Weight</text>
+      <rect x="240" y="300" width="100" height="200" rx="16" fill="#f3f4f6"/>
+      <text x="290" y="400" font-family="system-ui" font-size="32" fill="#111111" text-anchor="middle" font-weight="700">165</text>
+      <text x="290" y="435" font-family="system-ui" font-size="14" fill="#666666" text-anchor="middle">lbs</text>
+      <rect x="46" y="700" width="300" height="56" rx="28" fill="#10B981"/>
+      <text x="196" y="736" font-family="system-ui" font-size="18" fill="white" text-anchor="middle" font-weight="600">Continue</text>
+    </svg>`,
+    goalSpeed: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 393 852" width="393" height="852">
+      <rect width="393" height="852" fill="#ffffff"/>
+      <text x="196" y="150" font-family="system-ui" font-size="24" fill="#111111" text-anchor="middle" font-weight="700">Choose your pace</text>
+      <text x="196" y="185" font-family="system-ui" font-size="14" fill="#666666" text-anchor="middle">How fast do you want results?</text>
+      <rect x="46" y="280" width="300" height="120" rx="20" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+      <text x="196" y="330" font-family="system-ui" font-size="18" fill="#111111" text-anchor="middle" font-weight="600">Slow and Steady</text>
+      <text x="196" y="360" font-family="system-ui" font-size="14" fill="#666666" text-anchor="middle">0.5 lb per week</text>
+      <text x="196" y="385" font-family="system-ui" font-size="12" fill="#10B981" text-anchor="middle">Recommended</text>
+      <rect x="46" y="420" width="300" height="100" rx="20" fill="#f3f4f6"/>
+      <text x="196" y="465" font-family="system-ui" font-size="18" fill="#111111" text-anchor="middle" font-weight="600">Moderate</text>
+      <text x="196" y="495" font-family="system-ui" font-size="14" fill="#666666" text-anchor="middle">1 lb per week</text>
+      <rect x="46" y="540" width="300" height="100" rx="20" fill="#f3f4f6"/>
+      <text x="196" y="585" font-family="system-ui" font-size="18" fill="#111111" text-anchor="middle" font-weight="600">Fast</text>
+      <text x="196" y="615" font-family="system-ui" font-size="14" fill="#666666" text-anchor="middle">1.5 lbs per week</text>
+      <rect x="46" y="700" width="300" height="56" rx="28" fill="#10B981"/>
+      <text x="196" y="736" font-family="system-ui" font-size="18" fill="white" text-anchor="middle" font-weight="600">Continue</text>
+    </svg>`,
+    results: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 393 852" width="393" height="852">
+      <rect width="393" height="852" fill="#ffffff"/>
+      <text x="196" y="120" font-family="system-ui" font-size="24" fill="#111111" text-anchor="middle" font-weight="700">Cal AI creates</text>
+      <text x="196" y="155" font-family="system-ui" font-size="24" fill="#111111" text-anchor="middle" font-weight="700">long-term results</text>
+      <rect x="46" y="200" width="300" height="280" rx="20" fill="#f3f4f6"/>
+      <line x1="80" y1="420" x2="310" y2="420" stroke="#e5e7eb" stroke-width="2"/>
+      <polyline points="80,380 130,350 180,320 230,280 280,250 310,240" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="80" cy="380" r="6" fill="#10B981"/>
+      <circle cx="130" cy="350" r="6" fill="#10B981"/>
+      <circle cx="180" cy="320" r="6" fill="#10B981"/>
+      <circle cx="230" cy="280" r="6" fill="#10B981"/>
+      <circle cx="280" cy="250" r="6" fill="#10B981"/>
+      <circle cx="310" cy="240" r="6" fill="#10B981"/>
+      <text x="196" y="460" font-family="system-ui" font-size="14" fill="#666666" text-anchor="middle">Progress over 6 months</text>
+      <rect x="60" y="520" width="130" height="80" rx="12" fill="#ECFDF5"/>
+      <text x="125" y="555" font-family="system-ui" font-size="28" fill="#10B981" text-anchor="middle" font-weight="700">80%</text>
+      <text x="125" y="580" font-family="system-ui" font-size="11" fill="#666666" text-anchor="middle">maintain results</text>
+      <rect x="200" y="520" width="130" height="80" rx="12" fill="#EEF2FF"/>
+      <text x="265" y="555" font-family="system-ui" font-size="28" fill="#6366F1" text-anchor="middle" font-weight="700">4.8</text>
+      <text x="265" y="580" font-family="system-ui" font-size="11" fill="#666666" text-anchor="middle">App Store rating</text>
+      <rect x="46" y="700" width="300" height="56" rx="28" fill="#10B981"/>
+      <text x="196" y="736" font-family="system-ui" font-size="18" fill="white" text-anchor="middle" font-weight="600">Continue</text>
+    </svg>`,
+    paywall: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 393 852" width="393" height="852">
+      <defs>
+        <linearGradient id="paywallGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#10B981"/>
+          <stop offset="100%" style="stop-color:#059669"/>
+        </linearGradient>
+      </defs>
+      <rect width="393" height="852" fill="#ffffff"/>
+      <rect x="0" y="0" width="393" height="200" fill="url(#paywallGrad)"/>
+      <text x="196" y="100" font-family="system-ui" font-size="28" fill="white" text-anchor="middle" font-weight="700">Unlock Cal AI Pro</text>
+      <text x="196" y="135" font-family="system-ui" font-size="14" fill="white" text-anchor="middle" opacity="0.9">Unlimited scans and personalized plans</text>
+      <rect x="46" y="240" width="300" height="100" rx="16" fill="#f3f4f6" stroke="#10B981" stroke-width="2"/>
+      <text x="196" y="280" font-family="system-ui" font-size="20" fill="#111111" text-anchor="middle" font-weight="700">Yearly</text>
+      <text x="196" y="310" font-family="system-ui" font-size="14" fill="#666666" text-anchor="middle">$59.99/year - Best value</text>
+      <text x="196" y="330" font-family="system-ui" font-size="12" fill="#10B981" text-anchor="middle">Save 50%</text>
+      <rect x="46" y="360" width="300" height="80" rx="16" fill="#f3f4f6"/>
+      <text x="196" y="395" font-family="system-ui" font-size="18" fill="#111111" text-anchor="middle" font-weight="600">Monthly</text>
+      <text x="196" y="420" font-family="system-ui" font-size="14" fill="#666666" text-anchor="middle">$9.99/month</text>
+      <text x="70" y="500" font-family="system-ui" font-size="14" fill="#111111">* Unlimited food scans</text>
+      <text x="70" y="530" font-family="system-ui" font-size="14" fill="#111111">* Personalized meal plans</text>
+      <text x="70" y="560" font-family="system-ui" font-size="14" fill="#111111">* Detailed macro tracking</text>
+      <text x="70" y="590" font-family="system-ui" font-size="14" fill="#111111">* Progress insights</text>
+      <rect x="46" y="700" width="300" height="56" rx="28" fill="#10B981"/>
+      <text x="196" y="736" font-family="system-ui" font-size="18" fill="white" text-anchor="middle" font-weight="600">Start Free Trial</text>
+      <text x="196" y="780" font-family="system-ui" font-size="12" fill="#666666" text-anchor="middle">3-day free trial, cancel anytime</text>
+    </svg>`,
+  };
+  // Use data URI with URL encoding to handle all characters
+  const svg = svgs[screenType] || svgs.splash;
+  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+};
+
+// Pre-populate Cal AI screen assets
+const calAIScreenAssets: Asset[] = [
+  {
+    id: 'cal-ai-splash',
+    name: 'Cal AI Splash Screen',
+    type: 'screenshot',
+    url: generateCalAIScreenSvg('splash'),
+    width: 393,
+    height: 852,
+    tags: ['screen', 'onboarding', 'splash'],
+    createdAt: new Date(),
+    source: 'generated',
+    metadata: { screenType: 'splash' },
+  },
+  {
+    id: 'cal-ai-welcome',
+    name: 'Cal AI Welcome Screen',
+    type: 'screenshot',
+    url: generateCalAIScreenSvg('welcome'),
+    width: 393,
+    height: 852,
+    tags: ['screen', 'onboarding', 'welcome'],
+    createdAt: new Date(),
+    source: 'generated',
+    metadata: { screenType: 'welcome' },
+  },
+  {
+    id: 'cal-ai-gender',
+    name: 'Cal AI Gender Selection',
+    type: 'screenshot',
+    url: generateCalAIScreenSvg('gender'),
+    width: 393,
+    height: 852,
+    tags: ['screen', 'onboarding', 'survey'],
+    createdAt: new Date(),
+    source: 'generated',
+    metadata: { screenType: 'gender' },
+  },
+  {
+    id: 'cal-ai-source',
+    name: 'Cal AI Source Survey',
+    type: 'screenshot',
+    url: generateCalAIScreenSvg('source'),
+    width: 393,
+    height: 852,
+    tags: ['screen', 'onboarding', 'survey'],
+    createdAt: new Date(),
+    source: 'generated',
+    metadata: { screenType: 'source' },
+  },
+  {
+    id: 'cal-ai-height-weight',
+    name: 'Cal AI Height & Weight',
+    type: 'screenshot',
+    url: generateCalAIScreenSvg('heightWeight'),
+    width: 393,
+    height: 852,
+    tags: ['screen', 'onboarding', 'input'],
+    createdAt: new Date(),
+    source: 'generated',
+    metadata: { screenType: 'heightWeight' },
+  },
+  {
+    id: 'cal-ai-goal-speed',
+    name: 'Cal AI Goal Speed',
+    type: 'screenshot',
+    url: generateCalAIScreenSvg('goalSpeed'),
+    width: 393,
+    height: 852,
+    tags: ['screen', 'onboarding', 'selection'],
+    createdAt: new Date(),
+    source: 'generated',
+    metadata: { screenType: 'goalSpeed' },
+  },
+  {
+    id: 'cal-ai-results',
+    name: 'Cal AI Results Graph',
+    type: 'screenshot',
+    url: generateCalAIScreenSvg('results'),
+    width: 393,
+    height: 852,
+    tags: ['screen', 'onboarding', 'value-prop'],
+    createdAt: new Date(),
+    source: 'generated',
+    metadata: { screenType: 'results' },
+  },
+  {
+    id: 'cal-ai-paywall',
+    name: 'Cal AI Paywall',
+    type: 'screenshot',
+    url: generateCalAIScreenSvg('paywall'),
+    width: 393,
+    height: 852,
+    tags: ['screen', 'onboarding', 'paywall'],
+    createdAt: new Date(),
+    source: 'generated',
+    metadata: { screenType: 'paywall' },
+  },
+];
+
 interface BrandingStore extends BrandingState {
   // Initialization
   initializeBranding: () => Promise<void>;
@@ -105,7 +347,7 @@ const initialArtifacts: BrandingState['artifacts'] = {
   assets: {
     type: 'assets',
     status: 'draft',
-    assets: [],
+    assets: calAIScreenAssets,
     selectedAssetId: null,
     categories: ['logo', 'icon', 'screenshot', 'background', 'other'],
   },

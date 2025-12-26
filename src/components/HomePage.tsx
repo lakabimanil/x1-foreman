@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
 // Module types
@@ -10,12 +10,12 @@ interface Module {
   title: string;
   description: string;
   icon: React.ReactNode;
-  status: 'available' | 'coming_soon' | 'locked';
-  progress?: number;
-  totalTasks?: number;
-  completedTasks?: number;
+  status: 'done' | 'ready' | 'in_progress' | 'locked';
+  totalTasks: number;
+  completedTasks: number;
   accentColor: string;
   href?: string;
+  unlockMessage?: string;
 }
 
 // Project info
@@ -24,8 +24,8 @@ interface Project {
   tagline: string;
   description: string;
   logo: string;
-  completedMilestones: number;
-  totalMilestones: number;
+  completedTasks: number;
+  totalTasks: number;
 }
 
 const X1Logo = () => (
@@ -49,7 +49,7 @@ const ChevronDown = () => (
 );
 
 const ArrowRight = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <line x1="5" y1="12" x2="19" y2="12"/>
     <polyline points="12,5 19,12 12,19"/>
   </svg>
@@ -61,59 +61,65 @@ const PlayIcon = () => (
   </svg>
 );
 
-const LockIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-    <path d="M7 11V7a5 5 0 0110 0v4"/>
-  </svg>
-);
-
-// Module Icons
-const LightbulbIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M9 18h6"/>
-    <path d="M10 22h4"/>
-    <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 018.91 14"/>
-  </svg>
-);
-
-const AuthIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
-    <circle cx="12" cy="7" r="4"/>
-  </svg>
-);
-
-const HomeIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
-    <polyline points="9,22 9,12 15,12 15,22"/>
-  </svg>
-);
-
-const TabsIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="3" y="3" width="18" height="18" rx="2"/>
-    <line x1="3" y1="17" x2="21" y2="17"/>
-    <line x1="8" y1="17" x2="8" y2="21"/>
-    <line x1="16" y1="17" x2="16" y2="21"/>
-  </svg>
-);
-
 const SearchIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <circle cx="11" cy="11" r="8"/>
     <line x1="21" y1="21" x2="16.65" y2="16.65"/>
   </svg>
 );
 
-const PaywallIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <line x1="12" y1="1" x2="12" y2="23"/>
-    <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+const GridIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <rect x="3" y="3" width="7" height="7"/>
+    <rect x="14" y="3" width="7" height="7"/>
+    <rect x="14" y="14" width="7" height="7"/>
+    <rect x="3" y="14" width="7" height="7"/>
   </svg>
 );
 
+const ListIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <line x1="8" y1="6" x2="21" y2="6"/>
+    <line x1="8" y1="12" x2="21" y2="12"/>
+    <line x1="8" y1="18" x2="21" y2="18"/>
+    <line x1="3" y1="6" x2="3.01" y2="6"/>
+    <line x1="3" y1="12" x2="3.01" y2="12"/>
+    <line x1="3" y1="18" x2="3.01" y2="18"/>
+  </svg>
+);
+
+const MindMapIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <circle cx="12" cy="12" r="3"/>
+    <circle cx="4" cy="6" r="2"/>
+    <circle cx="20" cy="6" r="2"/>
+    <circle cx="4" cy="18" r="2"/>
+    <circle cx="20" cy="18" r="2"/>
+    <line x1="6" y1="6" x2="9.5" y2="10"/>
+    <line x1="18" y1="6" x2="14.5" y2="10"/>
+    <line x1="6" y1="18" x2="9.5" y2="14"/>
+    <line x1="18" y1="18" x2="14.5" y2="14"/>
+  </svg>
+);
+
+const CheckIcon = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+    <polyline points="20,6 9,17 4,12"/>
+  </svg>
+);
+
+const TaskListIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <line x1="8" y1="6" x2="21" y2="6"/>
+    <line x1="8" y1="12" x2="21" y2="12"/>
+    <line x1="8" y1="18" x2="21" y2="18"/>
+    <polyline points="3,6 4,7 6,5"/>
+    <polyline points="3,12 4,13 6,11"/>
+    <polyline points="3,18 4,19 6,17"/>
+  </svg>
+);
+
+// Module Icons
 const BrandIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <rect x="2" y="3" width="20" height="14" rx="2"/>
@@ -124,99 +130,50 @@ const BrandIcon = () => (
   </svg>
 );
 
-// Hardcoded data
-const project: Project = {
-  name: 'MuseFinder',
-  tagline: 'Your daily dose of creative energy.',
-  description: 'A meta-search engine that aggregates perfume prices across retailers in real time so shoppers buy from the cheapest verified seller—no manual price hunting. Id ducimus galisum sit culpa consequatur aut amet repellat sed minus harum aut rerum eveniet et necessitatibus eligendi.',
-  logo: '🔥',
-  completedMilestones: 0,
-  totalMilestones: 7,
-};
-
-// Helper icon for settings module
-const SettingsModuleIcon = () => (
+const AuthIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="12" r="3"/>
-    <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+    <circle cx="12" cy="7" r="4"/>
   </svg>
 );
 
+// Hardcoded data
+const project: Project = {
+  name: 'Cal AI',
+  tagline: 'Calorie tracking made easy.',
+  description: 'AI-powered calorie tracking app that lets users scan food with their camera for instant nutritional information. Personalized diet plans and progress tracking to help users reach their health goals.',
+  logo: '🍎',
+  completedTasks: 5,
+  totalTasks: 11,
+};
+
 const modules: Module[] = [
+  {
+    id: 'brand-studio',
+    title: 'Brand Studio',
+    description: 'Design your app name, icon, screenshots, and App Store copy with AI assistance.',
+    icon: <BrandIcon />,
+    status: 'done',
+    totalTasks: 5,
+    completedTasks: 5,
+    accentColor: '#60A5FA',
+    href: '/branding',
+  },
   {
     id: 'onboarding',
     title: 'Build Onboarding Flow',
     description: 'Create beautiful onboarding screens with surveys, value props, permissions, and paywalls.',
     icon: <AuthIcon />,
-    status: 'available',
-    progress: 25,
+    status: 'in_progress',
     totalTasks: 4,
     completedTasks: 1,
-    accentColor: 'var(--color-accent-green)',
+    accentColor: '#4ADE80',
     href: '/builder',
   },
-  {
-    id: 'brand-studio',
-    title: 'Build Brand Assets',
-    description: 'Design your app name, icon, screenshots, and App Store copy with AI assistance.',
-    icon: <BrandIcon />,
-    status: 'available',
-    totalTasks: 6,
-    completedTasks: 0,
-    accentColor: 'var(--color-accent-purple)',
-    href: '/branding',
-  },
-  {
-    id: 'home-screen',
-    title: 'Design the Home Screen',
-    description: 'Build a landing page that lists modules and progress.',
-    icon: <HomeIcon />,
-    status: 'coming_soon',
-    totalTasks: 4,
-    completedTasks: 0,
-    accentColor: 'var(--color-accent-blue)',
-  },
-  {
-    id: 'bottom-tabs',
-    title: 'Add Bottom Tabs',
-    description: 'Create a tab bar navigation for your app sections.',
-    icon: <TabsIcon />,
-    status: 'coming_soon',
-    totalTasks: 4,
-    completedTasks: 0,
-    accentColor: 'var(--color-accent-purple)',
-  },
-  {
-    id: 'search-page',
-    title: 'Build Search Page',
-    description: 'Add search functionality with filters and results.',
-    icon: <SearchIcon />,
-    status: 'coming_soon',
-    totalTasks: 4,
-    completedTasks: 0,
-    accentColor: 'var(--color-accent-blue)',
-  },
-  {
-    id: 'paywall',
-    title: 'Setup Paywall',
-    description: 'Configure subscription tiers and payment flows.',
-    icon: <PaywallIcon />,
-    status: 'coming_soon',
-    totalTasks: 4,
-    completedTasks: 0,
-    accentColor: 'var(--color-accent-red)',
-  },
-  {
-    id: 'settings',
-    title: 'User Settings',
-    description: 'Add profile management and app preferences.',
-    icon: <SettingsModuleIcon />,
-    status: 'coming_soon',
-    totalTasks: 4,
-    completedTasks: 0,
-    accentColor: 'var(--color-accent-yellow)',
-  },
 ];
+
+type FilterType = 'all' | 'in_progress' | 'done' | 'locked';
+type ViewType = 'card' | 'list' | 'mindmap';
 
 // Components
 const Header = () => (
@@ -250,6 +207,39 @@ const Header = () => (
   </header>
 );
 
+const PhoneMockup = () => (
+  <div className="relative w-44 h-72 flex-shrink-0">
+    {/* Phone frame */}
+    <div className="absolute inset-0 bg-white rounded-[2.5rem] border-4 border-gray-175 overflow-hidden shadow-2xl">
+      {/* Status bar */}
+      <div className="flex justify-between items-center px-6 pt-3 text-[10px] text-black">
+        <span>9:41</span>
+        <div className="w-20 h-6 bg-black rounded-full absolute left-1/2 -translate-x-1/2 top-2" />
+        <div className="flex gap-1">
+          <div className="w-4 h-2 border border-black rounded-sm relative">
+            <div className="absolute inset-0.5 bg-black rounded-sm" />
+          </div>
+        </div>
+      </div>
+      
+      {/* Content - Cal AI Splash Screen Style */}
+      <div className="flex flex-col items-center justify-center h-full pb-8 bg-white">
+        {/* Cal AI Logo/Text */}
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-black tracking-tight">Cal AI</h1>
+          <p className="text-[10px] text-gray-400 mt-1">Calorie tracking made easy</p>
+        </div>
+        
+        {/* Food scanning illustration */}
+        <div className="mt-6 w-20 h-20 rounded-2xl bg-gray-100 flex items-center justify-center">
+          <div className="text-3xl">📸</div>
+        </div>
+        <p className="text-[9px] text-gray-400 mt-2">Scan food instantly</p>
+      </div>
+    </div>
+  </div>
+);
+
 const ProjectCard = ({ project }: { project: Project }) => (
   <motion.div 
     initial={{ opacity: 0, y: 20 }}
@@ -257,290 +247,295 @@ const ProjectCard = ({ project }: { project: Project }) => (
     transition={{ duration: 0.5 }}
     className="bg-gray-150 rounded-2xl p-6 border border-gray-125"
   >
-    <div className="flex items-start justify-between">
-      <div className="flex items-center gap-4">
-        <div className="w-16 h-16 rounded-2xl bg-gray-175 flex items-center justify-center text-3xl border border-gray-125">
-          {project.logo}
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold text-white">{project.name}</h1>
-          <p className="text-gray-75">{project.tagline}</p>
-        </div>
-      </div>
+    <div className="flex gap-6">
+      {/* Phone mockup */}
+      <PhoneMockup />
 
-      <div className="flex items-center gap-3">
-        <button className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-gray-125 text-white hover:bg-gray-125 transition-colors">
-          <PaywallIcon />
-          <span className="text-sm">Revenue Model</span>
-        </button>
-        <button className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-gray-125 text-white hover:bg-gray-125 transition-colors">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
-            <line x1="12" y1="18" x2="12" y2="18"/>
-          </svg>
-          <span className="text-sm">Launch Simulator</span>
-        </button>
-        <button className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent-green text-black font-semibold hover:bg-accent-green/90 transition-colors">
-          <PlayIcon />
-          <span className="text-sm">Start Building</span>
-        </button>
-      </div>
-    </div>
-
-    <div className="mt-6 flex gap-4">
-      <div className="flex-1 bg-gray-175 rounded-xl p-4 border border-gray-125">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-sm font-medium text-white">Project Overview</h3>
-          <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-150 text-white text-xs hover:bg-gray-125 transition-colors">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
-              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
-            </svg>
-            Edit
-          </button>
-        </div>
-        <p className="text-sm text-gray-75 leading-relaxed line-clamp-3">
-          {project.description}
-        </p>
-      </div>
-
-      <div className="w-72 bg-gray-175 rounded-xl p-4 border border-gray-125">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-medium text-white">Overall completion</h3>
-          <span className="text-sm text-gray-75">{project.completedMilestones}/{project.totalMilestones} Milestones</span>
-        </div>
-        <div className="h-2 bg-gray-150 rounded-full overflow-hidden">
-          <motion.div 
-            initial={{ width: 0 }}
-            animate={{ width: `${(project.completedMilestones / project.totalMilestones) * 100}%` }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="h-full bg-accent-green rounded-full"
-          />
-        </div>
-      </div>
-    </div>
-  </motion.div>
-);
-
-const FeaturedModule = ({ module, index }: { module: Module; index: number }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 30 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-    className="bg-gray-150 rounded-2xl p-6 border border-gray-125 flex gap-6"
-  >
-    {/* Preview Image */}
-    <div className="w-64 h-48 rounded-xl overflow-hidden bg-gray-175 border border-gray-125 flex-shrink-0 relative">
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-150 to-gray-175">
-        {/* Mock iPhone frame */}
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 w-32 h-44 bg-gray-175 rounded-2xl border border-gray-125 overflow-hidden">
-          <div className="w-12 h-4 bg-black rounded-b-xl mx-auto" />
-          <div className="p-2 pt-3 space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-gray-150 mx-auto" style={{ backgroundColor: module.accentColor + '33' }}>
-              <div className="w-full h-full flex items-center justify-center opacity-60">
-                {module.icon}
-              </div>
-            </div>
-            <div className="space-y-1">
-              <div className="h-1.5 bg-gray-125 rounded w-3/4 mx-auto" />
-              <div className="h-1.5 bg-gray-125 rounded w-1/2 mx-auto" />
-            </div>
-            <div className="space-y-1 pt-2">
-              <div className="h-6 bg-gray-125 rounded-lg" />
-              <div className="h-6 bg-gray-125 rounded-lg" />
-            </div>
+      {/* Main content */}
+      <div className="flex-1 flex flex-col">
+        {/* Header row */}
+        <div className="flex items-start justify-between mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-white">{project.name}</h1>
+            <p className="text-gray-75 mt-1">{project.tagline}</p>
           </div>
-        </div>
-      </div>
-    </div>
 
-    {/* Content */}
-    <div className="flex-1 flex flex-col">
-      <div className="flex items-start justify-between">
-        <div>
-          {module.status === 'available' && module.completedTasks === module.totalTasks ? (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent-green/20 text-accent-green text-xs font-medium mb-3">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                <polyline points="20,6 9,17 4,12"/>
+          <div className="flex items-center gap-3">
+            {/* Recording indicator */}
+            <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
+            
+            <button className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-gray-125 text-white hover:bg-gray-125 transition-colors">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                <line x1="12" y1="18" x2="12" y2="18"/>
               </svg>
-              Completed
-            </span>
-          ) : module.status === 'available' ? (
-            <span className="inline-flex px-2.5 py-1 rounded-full bg-accent-green/20 text-accent-green text-xs font-medium mb-3">
-              Start here
-            </span>
-          ) : null}
-          <h3 className="text-xl font-semibold text-white mb-2">
-            Milestone {index + 1}: {module.title}
-          </h3>
-          <p className="text-gray-75 text-sm mb-4">{module.description}</p>
-        </div>
-      </div>
-
-      {/* Progress */}
-      <div className="mt-auto">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="flex-1 h-1.5 bg-gray-175 rounded-full overflow-hidden">
-            <div 
-              className="h-full rounded-full transition-all duration-500"
-              style={{ 
-                width: `${((module.completedTasks || 0) / (module.totalTasks || 1)) * 100}%`,
-                backgroundColor: module.accentColor 
-              }}
-            />
+              <span className="text-sm">Launch Simulator</span>
+            </button>
+            <button className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-gray-125 text-white hover:bg-gray-125 transition-colors">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                <polyline points="14,2 14,8 20,8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+              <span className="text-sm">Product Specs</span>
+            </button>
+            <button className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent-green text-black font-semibold hover:bg-accent-green/90 transition-colors">
+              <PlayIcon />
+              <span className="text-sm">Continue Building</span>
+            </button>
           </div>
         </div>
-        <p className="text-xs text-gray-75 mb-4">
-          {module.completedTasks}/{module.totalTasks} tasks completed · Completing this unlocks the rest of the flow.
-        </p>
 
-        <div className="flex items-center gap-4">
-          <Link href={module.href || '/builder'}>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black font-medium hover:bg-gray-50 transition-colors"
-            >
-              <span>Start Milestone {index + 1}</span>
-              <ArrowRight />
-            </motion.button>
-          </Link>
-          <button className="text-sm text-gray-75 hover:text-white underline transition-colors">
-            View task breakdown
-          </button>
+        {/* Bottom row */}
+        <div className="flex gap-4 mt-auto">
+          <div className="flex-1 bg-gray-175 rounded-xl p-4 border border-gray-125">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium text-white">Project Overview</h3>
+              <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-150 text-white text-xs hover:bg-gray-125 transition-colors border border-gray-125">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+                Edit
+              </button>
+            </div>
+            <p className="text-sm text-gray-75 leading-relaxed line-clamp-3">
+              {project.description}
+            </p>
+          </div>
+
+          <div className="w-56 bg-gray-175 rounded-xl p-4 border border-gray-125">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-medium text-white">Overall completion</h3>
+              <span className="text-sm text-gray-75">{project.completedTasks}/{project.totalTasks} Tasks</span>
+            </div>
+            <div className="h-2 bg-gray-150 rounded-full overflow-hidden">
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: `${(project.completedTasks / project.totalTasks) * 100}%` }}
+                transition={{ duration: 1, delay: 0.5 }}
+                className="h-full bg-white rounded-full"
+              />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-
-    {/* Side info */}
-    <div className="w-72 bg-gray-175 rounded-xl p-4 border border-gray-125 flex-shrink-0">
-      <h4 className="text-xs font-semibold text-gray-75 uppercase tracking-wider mb-4">
-        What happens after this
-      </h4>
-      <ul className="space-y-3">
-        <li className="flex items-start gap-2 text-sm text-gray-75">
-          <span className="text-accent-green mt-0.5">•</span>
-          <span>Preview your onboarding flow in the simulator.</span>
-        </li>
-        <li className="flex items-start gap-2 text-sm text-gray-75">
-          <span className="text-accent-green mt-0.5">•</span>
-          <span>Export native Swift code for your iOS app.</span>
-        </li>
-        <li className="flex items-start gap-2 text-sm text-gray-75">
-          <span className="text-accent-green mt-0.5">•</span>
-          <span>Other modules like Home Screen and Tabs will unlock.</span>
-        </li>
-      </ul>
     </div>
   </motion.div>
 );
 
-const ModuleCard = ({ module, index }: { module: Module; index: number }) => {
+const MilestoneCard = ({ module, index }: { module: Module; index: number }) => {
+  const isDone = module.status === 'done';
+  const isReady = module.status === 'ready';
+  const isInProgress = module.status === 'in_progress';
   const isLocked = module.status === 'locked';
-  const isComingSoon = module.status === 'coming_soon';
-  const isCompleted = module.completedTasks === module.totalTasks && module.totalTasks > 0;
-  const isClickable = !isLocked && !isComingSoon && module.href;
+  const progress = (module.completedTasks / module.totalTasks) * 100;
 
-  const CardWrapper = ({ children }: { children: React.ReactNode }) => {
-    if (isClickable && module.href) {
+  const getStatusBadge = () => {
+    if (isDone) {
       return (
-        <Link href={module.href} className="block">
-          {children}
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent-green/20 text-accent-green text-xs font-medium">
+          Done
+        </span>
+      );
+    }
+    if (isReady || isInProgress) {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent-green/20 text-accent-green text-xs font-medium">
+          Ready
+        </span>
+      );
+    }
+    if (isLocked) {
+      return (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-175 text-gray-75 text-xs font-medium">
+          Locked
+        </span>
+      );
+    }
+    return null;
+  };
+
+  const getActionButton = () => {
+    if (isDone) {
+      return (
+        <Link href={module.href || '#'}>
+          <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-125 text-white hover:bg-gray-125 transition-colors text-sm">
+            View Milestone
+            <ArrowRight />
+          </button>
         </Link>
       );
     }
-    return <>{children}</>;
+    if (isReady || isInProgress) {
+      return (
+        <Link href={module.href || '#'}>
+          <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-125 text-white hover:bg-gray-125 transition-colors text-sm">
+            Open Milestone
+            <ArrowRight />
+          </button>
+        </Link>
+      );
+    }
+    if (isLocked) {
+      return (
+        <button disabled className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-125 text-gray-100 cursor-not-allowed text-sm opacity-50">
+          Open Milestone
+          <ArrowRight />
+        </button>
+      );
+    }
+    return (
+      <Link href={module.href || '#'}>
+        <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-125 text-white hover:bg-gray-125 transition-colors text-sm">
+          Start
+          <ArrowRight />
+        </button>
+      </Link>
+    );
   };
 
   return (
-    <CardWrapper>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-        className={`bg-gray-150 rounded-xl p-5 border border-gray-125 relative overflow-hidden group transition-all duration-300 ${
-          isLocked || isComingSoon 
-            ? 'opacity-60' 
-            : 'hover:border-gray-100 cursor-pointer hover:bg-gray-125/50'
-        }`}
-      >
-      {/* Status badge */}
-      {(isLocked || isComingSoon) && (
-        <div className="absolute top-4 right-4">
-          <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-gray-175 text-gray-75 text-xs">
-            {isComingSoon ? (
-              'Coming soon'
-            ) : (
-              <>
-                <LockIcon />
-                Locked
-              </>
-            )}
-          </span>
-        </div>
-      )}
-
-      {/* Completed badge */}
-      {isCompleted && (
-        <div className="absolute top-4 right-4">
-          <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-accent-green/20 text-accent-green text-xs">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-              <polyline points="20,6 9,17 4,12"/>
-            </svg>
-            Done
-          </span>
-        </div>
-      )}
-
-      <div className="flex items-start gap-4">
-        <div 
-          className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ backgroundColor: module.accentColor + '22' }}
-        >
-          <div style={{ color: module.accentColor }}>
-            {module.icon}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: 0.1 * index }}
+      className={`bg-gray-150 rounded-2xl p-6 border border-gray-125 flex flex-col ${isLocked ? 'opacity-60' : ''}`}
+    >
+      {/* Header */}
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex items-center gap-4">
+          {/* Avatar/Icon */}
+          <div 
+            className="w-14 h-14 rounded-full flex items-center justify-center text-2xl font-bold"
+            style={{ backgroundColor: module.accentColor + '33', color: module.accentColor }}
+          >
+            {module.title.charAt(0)}
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-white">
+              Milestone {index + 1}: {module.title}
+            </h3>
+            <p className="text-sm text-gray-75 mt-1 line-clamp-2">
+              {module.description}
+            </p>
           </div>
         </div>
-
-        <div className="flex-1 min-w-0">
-          <h3 className="text-base font-semibold text-white mb-1">
-            Milestone {index + 1}: {module.title}
-          </h3>
-          <p className="text-sm text-gray-75 line-clamp-2 mb-3">
-            {module.description}
-          </p>
-
-          {/* Progress bar */}
-          <div className="flex items-center gap-3">
-            <div className="flex-1 h-1 bg-gray-175 rounded-full overflow-hidden">
-              <div 
-                className="h-full rounded-full transition-all duration-500"
-                style={{ 
-                  width: `${((module.completedTasks || 0) / (module.totalTasks || 1)) * 100}%`,
-                  backgroundColor: isLocked ? 'var(--color-gray-100)' : module.accentColor 
-                }}
-              />
-            </div>
-            <span className="text-xs text-gray-75 flex-shrink-0">
-              {module.completedTasks || 0}/{module.totalTasks} Tasks
-            </span>
-          </div>
-        </div>
+        {getStatusBadge()}
       </div>
-      </motion.div>
-    </CardWrapper>
+
+      {/* Progress bar */}
+      <div className="mt-auto">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="flex-1 h-1.5 bg-gray-175 rounded-full overflow-hidden">
+            <motion.div 
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="h-full rounded-full"
+              style={{ backgroundColor: module.accentColor }}
+            />
+          </div>
+          <span className="text-xs text-gray-75 flex-shrink-0">
+            {module.completedTasks}/{module.totalTasks} Tasks
+          </span>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center gap-3 mt-4">
+          {getActionButton()}
+          <button className="w-10 h-10 rounded-full border border-gray-125 flex items-center justify-center text-gray-75 hover:bg-gray-125 hover:text-white transition-colors">
+            <TaskListIcon />
+          </button>
+        </div>
+
+        {/* Unlock message */}
+        {isLocked && module.unlockMessage && (
+          <p className="text-xs text-gray-100 mt-3">{module.unlockMessage}</p>
+        )}
+      </div>
+    </motion.div>
+  );
+};
+
+const ViewDropdown = ({ view, setView }: { view: ViewType; setView: (v: ViewType) => void }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="relative">
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-125 text-white hover:bg-gray-125 transition-colors"
+      >
+        <GridIcon />
+        <span className="text-sm">Card View</span>
+        <ChevronDown />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="absolute right-0 top-full mt-2 w-48 bg-gray-150 border border-gray-125 rounded-xl overflow-hidden shadow-xl z-50"
+          >
+            <button
+              onClick={() => { setView('card'); setIsOpen(false); }}
+              className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-125 transition-colors ${view === 'card' ? 'text-white' : 'text-gray-75'}`}
+            >
+              <GridIcon />
+              <span className="text-sm">Card View</span>
+              {view === 'card' && <CheckIcon />}
+            </button>
+            <button
+              onClick={() => { setView('list'); setIsOpen(false); }}
+              className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-125 transition-colors ${view === 'list' ? 'text-white' : 'text-gray-75'}`}
+            >
+              <ListIcon />
+              <span className="text-sm">List View</span>
+              {view === 'list' && <CheckIcon />}
+            </button>
+            <button
+              onClick={() => { setView('mindmap'); setIsOpen(false); }}
+              className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-125 transition-colors ${view === 'mindmap' ? 'text-white' : 'text-gray-75'}`}
+            >
+              <MindMapIcon />
+              <span className="text-sm">Hybrid Mind Map</span>
+              {view === 'mindmap' && <CheckIcon />}
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
 
 export default function HomePage() {
-  const [activeModule] = useState<string | null>(null);
+  const [filter, setFilter] = useState<FilterType>('all');
+  const [view, setView] = useState<ViewType>('card');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Find the first available module for featured section
-  const featuredModule = modules.find(m => m.status === 'available' && m.completedTasks !== m.totalTasks) || modules[1];
-  const featuredIndex = modules.indexOf(featuredModule);
+  const filteredModules = modules.filter(module => {
+    // Search filter
+    if (searchQuery && !module.title.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false;
+    }
+    // Status filter
+    if (filter === 'all') return true;
+    if (filter === 'in_progress') return module.status === 'in_progress' || module.status === 'ready';
+    if (filter === 'done') return module.status === 'done';
+    if (filter === 'locked') return module.status === 'locked';
+    return true;
+  });
 
-  // Other modules for the grid
-  const otherModules = modules.filter(m => m.id !== featuredModule.id);
+  const filterTabs: { id: FilterType; label: string }[] = [
+    { id: 'all', label: 'All' },
+    { id: 'in_progress', label: 'In progress' },
+    { id: 'done', label: 'Done' },
+    { id: 'locked', label: 'Locked' },
+  ];
 
   return (
     <div className="min-h-screen bg-black">
@@ -550,66 +545,75 @@ export default function HomePage() {
         {/* Project Card */}
         <ProjectCard project={project} />
 
-        {/* Current Step Section */}
+        {/* Project Milestone Section */}
         <motion.section 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-12"
         >
-          <div className="mb-6">
-            <span className="text-accent-green text-sm font-semibold uppercase tracking-wider">
-              Step 1
-            </span>
-            <h2 className="text-2xl font-bold text-white mt-1">
-              Start with your next milestone
-            </h2>
-            <p className="text-gray-75 mt-2">
-              We'll unlock the rest as you make progress. Start here to create a solid foundation for the rest of your app.
-            </p>
-          </div>
-
-          <FeaturedModule module={featuredModule} index={featuredIndex} />
-        </motion.section>
-
-        {/* Upcoming Milestones */}
-        <motion.section 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="mt-12"
-        >
-          <div className="flex items-center justify-between mb-6">
+          {/* Section Header */}
+          <div className="flex items-start justify-between mb-8">
             <div>
-              <h2 className="text-xl font-bold text-white">Upcoming milestones</h2>
-              <p className="text-gray-75 text-sm mt-1">
-                These will unlock as you complete the current step. You can still skim what's coming next.
+              <h2 className="text-2xl font-bold text-white">Project Milestone</h2>
+              <p className="text-gray-75 mt-1">
+                Modules generated from your product specifications with real-time progress tracking.
               </p>
             </div>
-            <div className="flex items-center gap-6 text-sm">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-accent-green" />
-                <span className="text-gray-75">Current step</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-gray-125" />
-                <span className="text-gray-75">Locked step</span>
-              </div>
-            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {otherModules.map((module, idx) => (
-              <ModuleCard 
-                key={module.id} 
-                module={module} 
-                index={modules.indexOf(module)}
+          {/* Filters and Search */}
+          <div className="flex items-center justify-between mb-6">
+            {/* Search */}
+            <div className="w-64 pl-10 pr-4 py-2.5 bg-gray-175 border border-gray-125 rounded-full text-white placeholder-gray-75 relative">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-75">
+                <SearchIcon />
+              </div>
+              <input
+                type="text"
+                placeholder="Search modules..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-transparent focus:outline-none text-sm"
               />
+            </div>
+
+            {/* Filter Tabs */}
+            <div className="flex items-center gap-2">
+              {filterTabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setFilter(tab.id)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                    filter === tab.id
+                      ? 'bg-white text-black'
+                      : 'bg-gray-175 text-gray-75 hover:text-white border border-gray-125'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* View Toggle */}
+            <ViewDropdown view={view} setView={setView} />
+          </div>
+
+          {/* Milestone Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {filteredModules.map((module, index) => (
+              <MilestoneCard key={module.id} module={module} index={index} />
             ))}
           </div>
+
+          {/* Empty state */}
+          {filteredModules.length === 0 && (
+            <div className="text-center py-16">
+              <p className="text-gray-75">No modules found matching your criteria.</p>
+            </div>
+          )}
         </motion.section>
       </main>
     </div>
   );
 }
-

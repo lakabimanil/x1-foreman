@@ -77,10 +77,19 @@ export default function LivePreview() {
                   {screenshots.cards.slice(0, 3).map((card) => (
                     <div
                       key={card.id}
-                      className="flex-shrink-0 w-20 h-36 rounded-lg bg-gradient-to-br from-indigo-600 to-purple-600 overflow-hidden"
+                      className="flex-shrink-0 w-20 h-36 rounded-lg overflow-hidden relative"
                     >
-                      <div className="h-full p-2 flex items-end">
-                        <p className="text-[7px] text-white/80 line-clamp-2">
+                      {card.imageUrl ? (
+                        <img 
+                          src={card.imageUrl}
+                          alt={card.headline}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-indigo-600 to-purple-600" />
+                      )}
+                      <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent">
+                        <p className="text-[7px] text-white/90 line-clamp-2">
                           {card.headline}
                         </p>
                       </div>
