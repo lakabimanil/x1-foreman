@@ -7,7 +7,8 @@ import { useBrandingStore } from '@/store/useBrandingStore';
 
 export default function CopyWorkspace() {
   const { artifacts, updateCopy, lockCopy, isGenerating } = useBrandingStore();
-  const { copy, isLocked } = artifacts.copy;
+  const { copy, status } = artifacts.copy;
+  const isLocked = status === 'locked';
   const [activeField, setActiveField] = useState<string | null>(null);
   
   const fields = [

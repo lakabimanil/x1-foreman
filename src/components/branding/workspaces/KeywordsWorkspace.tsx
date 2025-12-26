@@ -8,7 +8,8 @@ import { useBrandingStore } from '@/store/useBrandingStore';
 export default function KeywordsWorkspace() {
   const [newKeyword, setNewKeyword] = useState('');
   const { artifacts, addKeyword, removeKeyword, lockKeywords } = useBrandingStore();
-  const { keywords, isLocked, currentCharacters, maxCharacters } = artifacts.keywords;
+  const { keywords, status, currentCharacters, maxCharacters } = artifacts.keywords;
+  const isLocked = status === 'locked';
   
   const isOverLimit = currentCharacters > maxCharacters;
   
