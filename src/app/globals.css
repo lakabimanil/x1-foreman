@@ -52,7 +52,6 @@ body {
   background: var(--color-base-black);
   color: var(--text-primary);
   font-family: var(--font-sans);
-  overflow: hidden;
 }
 
 /* Custom scrollbar */
