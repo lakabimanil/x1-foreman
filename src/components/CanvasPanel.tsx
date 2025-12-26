@@ -35,6 +35,7 @@ const blockTypeConfig: Record<BlockType, { icon: React.ElementType; color: strin
   splash: { icon: Sparkles, color: 'var(--color-accent-yellow)', label: 'Splash' },
 };
 
+
 interface SortableCardProps {
   block: OnboardingBlock;
   isActive: boolean;

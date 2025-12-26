@@ -7,8 +7,9 @@ import {
   ChevronRight, FolderOpen, Layers, Grid3X3, 
   Square, CircleDot, Type, MousePointer, Play,
   Smartphone, ListChecks, Shield, CreditCard, Video,
-  Check, X, Plus
+  Check, X, Plus, ArrowLeft
 } from 'lucide-react';
+import Link from 'next/link';
 import { useOnboardingStore } from '@/store/useOnboardingStore';
 import { 
   x1LibraryAssets, 
@@ -109,6 +110,15 @@ export default function LeftPanel() {
       {/* Header */}
       <div className="p-4 border-b border-[var(--color-gray-125)] flex-shrink-0">
         <div className="flex items-center gap-3">
+          {/* Back Button */}
+          <Link 
+            href="/"
+            className="w-9 h-9 rounded-xl bg-[var(--color-gray-150)] border border-[var(--color-gray-125)] flex items-center justify-center flex-shrink-0 hover:bg-[var(--color-gray-125)] transition-colors"
+            title="Back to Home"
+          >
+            <ArrowLeft className="w-4 h-4 text-[var(--color-gray-75)]" />
+          </Link>
+          
           <div className="w-9 h-9 rounded-xl bg-[var(--color-base-white)] flex items-center justify-center flex-shrink-0">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M16 6L8 18" stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
