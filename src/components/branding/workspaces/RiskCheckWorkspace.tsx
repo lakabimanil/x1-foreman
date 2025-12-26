@@ -6,7 +6,7 @@ import { useBrandingStore } from '@/store/useBrandingStore';
 
 export default function RiskCheckWorkspace() {
   const { artifacts, runRiskCheck, applyFix, isGenerating } = useBrandingStore();
-  const { result, lastChecked, checkMode } = artifacts.riskCheck;
+  const { result, mode } = artifacts.riskCheck;
   
   const getRiskColor = (score: number) => {
     if (score <= 25) return { text: 'text-emerald-400', bg: 'bg-emerald-500/10' };
@@ -28,7 +28,7 @@ export default function RiskCheckWorkspace() {
           onClick={() => runRiskCheck('fast')}
           disabled={isGenerating}
           className={`p-4 rounded-xl text-left transition-all ${
-            checkMode === 'fast' && result
+            mode === 'fast' && result
               ? 'bg-white/5 ring-1 ring-white/10'
               : 'bg-neutral-900 hover:bg-neutral-800'
           }`}
@@ -42,7 +42,7 @@ export default function RiskCheckWorkspace() {
           onClick={() => runRiskCheck('llm')}
           disabled={isGenerating}
           className={`p-4 rounded-xl text-left transition-all ${
-            checkMode === 'llm' && result
+            mode === 'llm' && result
               ? 'bg-white/5 ring-1 ring-white/10'
               : 'bg-neutral-900 hover:bg-neutral-800'
           }`}
@@ -73,11 +73,6 @@ export default function RiskCheckWorkspace() {
               </div>
               <Shield className={`w-10 h-10 ${getRiskColor(result.score).text} opacity-50`} />
             </div>
-            {lastChecked && (
-              <p className="text-[10px] text-neutral-500 mt-3">
-                Last checked: {new Date(lastChecked).toLocaleTimeString()}
-              </p>
-            )}
           </div>
           
           {/* Findings */}
@@ -95,10 +90,10 @@ export default function RiskCheckWorkspace() {
                     animate={{ opacity: finding.applied ? 0.4 : 1 }}
                     className={`p-4 rounded-xl bg-neutral-900 ${finding.applied ? 'opacity-40' : ''}`}
                   >
-                    <div className="flex items-start gap-3">
-                      <AlertTriangle className={`w-4 h-4 flex-shrink-0 mt-0.5 ${
-                        finding.severity === 'high' ? 'text-rose-400' :
-                        finding.severity === 'medium' ? 'text-amber-400' : 'text-blue-400'
+                     <div className="flex items-start gap-3">
+                       <AlertTriangle className={`w-4 h-4 flex-shrink-0 mt-0.5 ${
+                        finding.severity === 'critical' ? 'text-rose-400' :
+                        finding.severity === 'error' ? 'text-amber-400' : 'text-blue-400'
                       }`} />
                       
                       <div className="flex-1 min-w-0">
@@ -109,10 +104,10 @@ export default function RiskCheckWorkspace() {
                           {finding.explanation}
                         </p>
                         
-                        {finding.suggestedFix && !finding.applied && (
+                        {finding.suggestedRewrite && !finding.applied && (
                           <div className="flex items-center gap-2 mt-3">
                             <span className="text-xs text-neutral-400">
-                              → {finding.suggestedFix}
+                              → {finding.suggestedRewrite}
                             </span>
                             <button
                               onClick={() => applyFix(finding.id)}

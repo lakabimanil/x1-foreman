@@ -92,7 +92,7 @@ const calAINameOptions: Omit<AppNameOption, 'id'>[] = [
     name: 'Calorie Cam',
     vibeTags: ['Literal', 'Playful', 'Short'],
     scores: { memorability: 85, clarity: 92, uniqueness: 72 },
-    availability: { appStore: 'available', domain: 'partial', social: 'available' },
+    availability: { appStore: 'available', domain: 'taken', social: 'available' },
     analysis: "Emphasizes the camera-based scanning feature. Simple and effective.",
     pros: ['Clear feature highlight', 'Easy to understand', 'Catchy alliteration'],
     cons: ['Common naming pattern'],

@@ -108,7 +108,7 @@ export default function KeywordsWorkspace() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ${
-                keyword.isRisky
+                keyword.risky
                   ? 'bg-amber-500/10 text-amber-400'
                   : 'bg-neutral-800 text-white'
               }`}

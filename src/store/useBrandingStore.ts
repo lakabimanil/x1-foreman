@@ -191,7 +191,6 @@ const calAIScreenAssets: Asset[] = [
     tags: ['screen', 'onboarding', 'splash'],
     createdAt: new Date(),
     source: 'generated',
-    metadata: { screenType: 'splash' },
   },
   {
     id: 'cal-ai-welcome',
@@ -203,7 +202,6 @@ const calAIScreenAssets: Asset[] = [
     tags: ['screen', 'onboarding', 'welcome'],
     createdAt: new Date(),
     source: 'generated',
-    metadata: { screenType: 'welcome' },
   },
   {
     id: 'cal-ai-gender',
@@ -215,7 +213,6 @@ const calAIScreenAssets: Asset[] = [
     tags: ['screen', 'onboarding', 'survey'],
     createdAt: new Date(),
     source: 'generated',
-    metadata: { screenType: 'gender' },
   },
   {
     id: 'cal-ai-source',
@@ -227,7 +224,6 @@ const calAIScreenAssets: Asset[] = [
     tags: ['screen', 'onboarding', 'survey'],
     createdAt: new Date(),
     source: 'generated',
-    metadata: { screenType: 'source' },
   },
   {
     id: 'cal-ai-height-weight',
@@ -239,7 +235,6 @@ const calAIScreenAssets: Asset[] = [
     tags: ['screen', 'onboarding', 'input'],
     createdAt: new Date(),
     source: 'generated',
-    metadata: { screenType: 'heightWeight' },
   },
   {
     id: 'cal-ai-goal-speed',
@@ -251,7 +246,6 @@ const calAIScreenAssets: Asset[] = [
     tags: ['screen', 'onboarding', 'selection'],
     createdAt: new Date(),
     source: 'generated',
-    metadata: { screenType: 'goalSpeed' },
   },
   {
     id: 'cal-ai-results',
@@ -263,7 +257,6 @@ const calAIScreenAssets: Asset[] = [
     tags: ['screen', 'onboarding', 'value-prop'],
     createdAt: new Date(),
     source: 'generated',
-    metadata: { screenType: 'results' },
   },
   {
     id: 'cal-ai-paywall',
@@ -275,7 +268,6 @@ const calAIScreenAssets: Asset[] = [
     tags: ['screen', 'onboarding', 'paywall'],
     createdAt: new Date(),
     source: 'generated',
-    metadata: { screenType: 'paywall' },
   },
 ];
 
