@@ -18,6 +18,7 @@ import {
   Instagram,
 } from 'lucide-react';
 import { useWebPresenceStore } from '@/store/useWebPresenceStore';
+import type { LandingPageData } from '@/types/webPresence';
 
 export function LandingPageBuilder() {
   const {
@@ -365,7 +366,7 @@ function LandingPagePreview({
   data, 
   isMobile 
 }: { 
-  data: typeof useWebPresenceStore extends () => infer R ? R extends { artifacts: { landingPage: { data: infer D } } } ? D : never : never;
+  data: LandingPageData;
   isMobile: boolean;
 }) {
   return (

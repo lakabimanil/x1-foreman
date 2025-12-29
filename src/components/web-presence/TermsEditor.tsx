@@ -15,6 +15,7 @@ import {
   X,
 } from 'lucide-react';
 import { useWebPresenceStore } from '@/store/useWebPresenceStore';
+import type { TermsData } from '@/types/webPresence';
 
 export function TermsEditor() {
   const {
@@ -420,7 +421,7 @@ export function TermsEditor() {
 }
 
 // Preview Component
-function TermsPreview({ data }: { data: typeof useWebPresenceStore extends () => infer R ? R extends { artifacts: { terms: { data: infer D } } } ? D : never : never }) {
+function TermsPreview({ data }: { data: TermsData }) {
   return (
     <div className="p-8 min-h-full">
       <div className="max-w-lg mx-auto">

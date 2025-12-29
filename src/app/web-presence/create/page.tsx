@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { GuidedInterview, DocumentCanvas } from '@/components/web-presence';
 import { documentTemplates, getTemplate } from '@/config/interviewTemplates';
@@ -11,7 +11,7 @@ type FlowState =
   | { step: 'interview'; templateType: string }
   | { step: 'canvas'; document: GeneratedDocument; schema: DocumentSchema };
 
-export default function CreateDocumentPage() {
+function CreateDocumentPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const templateType = searchParams.get('type');
@@ -133,4 +133,16 @@ export default function CreateDocumentPage() {
   }
   
   return null;
+}
+
+export default function CreateDocumentPage() {
+  return (
+    <Suspense fallback={
+      <div className="h-screen bg-black flex items-center justify-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    }>
+      <CreateDocumentPageContent />
+    </Suspense>
+  );
 }

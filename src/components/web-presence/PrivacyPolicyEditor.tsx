@@ -15,6 +15,7 @@ import {
   PanelRightOpen,
 } from 'lucide-react';
 import { useWebPresenceStore } from '@/store/useWebPresenceStore';
+import type { PrivacyPolicyData } from '@/types/webPresence';
 
 export function PrivacyPolicyEditor() {
   const {
@@ -300,7 +301,7 @@ export function PrivacyPolicyEditor() {
 }
 
 // Preview Component
-function PrivacyPolicyPreview({ data }: { data: typeof useWebPresenceStore extends () => infer R ? R extends { artifacts: { privacyPolicy: { data: infer D } } } ? D : never : never }) {
+function PrivacyPolicyPreview({ data }: { data: PrivacyPolicyData }) {
   const enabledData = data.dataCollected.filter(d => d.enabled);
   const enabledServices = data.thirdPartyServices.filter(s => s.enabled);
   
