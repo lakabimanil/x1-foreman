@@ -89,7 +89,7 @@ export interface WebPresenceState {
   };
   
   // Active view
-  activeView: 'overview' | 'privacy-policy' | 'terms' | 'landing-page';
+  activeView: 'overview' | 'privacy-policy' | 'terms' | 'landing-page' | 'admin';
   
   // Preview mode
   isPreviewOpen: boolean;

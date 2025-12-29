@@ -5,6 +5,7 @@ import { WebPresenceOverview } from '@/components/web-presence/WebPresenceOvervi
 import { PrivacyPolicyEditor } from '@/components/web-presence/PrivacyPolicyEditor';
 import { TermsEditor } from '@/components/web-presence/TermsEditor';
 import { LandingPageBuilder } from '@/components/web-presence/LandingPageBuilder';
+import { AdminDashboard } from '@/components/web-presence/AdminDashboard';
 import { WebPresenceSidebar } from '@/components/web-presence/WebPresenceSidebar';
 
 export default function WebPresencePage() {
@@ -20,6 +21,8 @@ export default function WebPresencePage() {
         return <TermsEditor />;
       case 'landing-page':
         return <LandingPageBuilder />;
+      case 'admin':
+        return <AdminDashboard />;
       default:
         return <WebPresenceOverview />;
     }

@@ -7,6 +7,7 @@ import {
   Shield,
   FileText,
   Layout,
+  Settings,
   Check,
   ArrowLeft,
   AlertCircle,
@@ -18,8 +19,9 @@ import { useWebPresenceStore } from '@/store/useWebPresenceStore';
 import type { WebPresenceState } from '@/types/webPresence';
 
 type ViewType = WebPresenceState['activeView'];
+type ArtifactView = Exclude<ViewType, 'overview' | 'admin'>;
 
-const viewConfig: Record<Exclude<ViewType, 'overview'>, {
+const viewConfig: Record<ArtifactView, {
   icon: React.ElementType;
   label: string;
   shortLabel: string;
@@ -65,7 +67,7 @@ export function WebPresenceSidebar() {
     generatedDocuments,
   } = useWebPresenceStore();
   
-  const getStatusForView = (view: Exclude<ViewType, 'overview'>) => {
+  const getStatusForView = (view: ArtifactView) => {
     switch (view) {
       case 'privacy-policy':
         return artifacts.privacyPolicy.status;
@@ -231,7 +233,7 @@ export function WebPresenceSidebar() {
         </p>
         
         {/* Artifact Items */}
-        {(Object.keys(viewConfig) as Exclude<ViewType, 'overview'>[]).map((viewKey, index) => {
+        {(Object.keys(viewConfig) as ArtifactView[]).map((viewKey, index) => {
           const config = viewConfig[viewKey];
           const Icon = config.icon;
           const isActive = activeView === viewKey;
@@ -321,6 +323,56 @@ export function WebPresenceSidebar() {
             </motion.button>
           );
         })}
+        
+        {/* Divider */}
+        <div className="my-3 mx-2">
+          <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        </div>
+        
+        <p className="text-[10px] font-semibold text-white/30 uppercase tracking-wider px-3 mb-2">
+          Operations
+        </p>
+        
+        {/* Admin */}
+        <button
+          onClick={() => setActiveView('admin')}
+          className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl mb-1 transition-all relative group ${
+            activeView === 'admin'
+              ? 'bg-white/[0.08]'
+              : 'hover:bg-white/[0.04]'
+          }`}
+        >
+          {activeView === 'admin' && (
+            <motion.div
+              layoutId="active-indicator"
+              className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-6 bg-gradient-to-b from-rose-400 to-pink-500 rounded-r-full"
+              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+            />
+          )}
+          
+          <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
+            activeView === 'admin' 
+              ? 'bg-gradient-to-br from-white/10 to-white/[0.03]' 
+              : 'bg-white/[0.03] group-hover:bg-white/[0.06]'
+          }`}>
+            <Settings className={`w-4 h-4 ${activeView === 'admin' ? 'text-white' : 'text-white/50'}`} />
+          </div>
+          
+          <div className="flex-1 flex flex-col items-start min-w-0">
+            <span className={`text-sm transition-colors truncate ${
+              activeView === 'admin' ? 'text-white font-medium' : 'text-white/50 group-hover:text-white/70'
+            }`}>
+              Admin & Moderation
+            </span>
+            <span className="text-[10px] text-white/30">
+              Review + support + billing ops
+            </span>
+          </div>
+          
+          <ChevronRight className={`w-4 h-4 transition-all ${
+            activeView === 'admin' ? 'text-white/40' : 'text-white/20 group-hover:text-white/30'
+          } ${activeView === 'admin' ? '' : 'group-hover:translate-x-0.5'}`} />
+        </button>
       </nav>
       
       {/* Footer */}
