@@ -37,7 +37,7 @@ const StatusBadge = ({ status }: { status: WebArtifactStatus }) => {
 
 export function WebPresenceOverview() {
   const router = useRouter();
-  const { artifacts, setActiveView, moduleStatus } = useWebPresenceStore();
+  const { artifacts, setActiveView, moduleStatus, generatedDocuments } = useWebPresenceStore();
   
   // Map internal view IDs to the new guided interview document types
   const documentTypeMap: Record<string, string> = {
@@ -53,9 +53,21 @@ export function WebPresenceOverview() {
     }
   };
   
-  const handleEditDocument = (e: React.MouseEvent, view: 'privacy-policy' | 'terms') => {
+  const handleEditDocument = (e: React.MouseEvent, viewId: string) => {
     e.stopPropagation(); // Prevent card click
-    setActiveView(view);
+    const documentType = documentTypeMap[viewId];
+    if (documentType) {
+      // Check if we have a generated document from the new flow
+      const hasGeneratedDocument = generatedDocuments[documentType as keyof typeof generatedDocuments];
+      
+      if (hasGeneratedDocument) {
+        // Go to the new canvas editor
+        router.push(`/web-presence/edit?type=${documentType}`);
+      } else {
+        // Fallback to old editor if no generated document exists
+        setActiveView(viewId as 'privacy-policy' | 'terms');
+      }
+    }
   };
   
   const legalItems = [
@@ -164,13 +176,20 @@ export function WebPresenceOverview() {
                   transition={{ delay: index * 0.1 }}
                   className="group bg-neutral-900/50 hover:bg-neutral-900 border border-neutral-800 hover:border-neutral-700 rounded-2xl p-5 transition-all cursor-pointer"
                   onClick={() => {
+                    const documentType = documentTypeMap[item.id];
+                    if (!documentType) return;
+                    
                     if (item.status === 'not_created') {
-                      const documentType = documentTypeMap[item.id];
-                      if (documentType) {
+                      // Check if document was created via new flow
+                      const hasGeneratedDocument = generatedDocuments[documentType as keyof typeof generatedDocuments];
+                      if (hasGeneratedDocument) {
+                        router.push(`/web-presence/edit?type=${documentType}`);
+                      } else {
                         router.push(`/web-presence/create?type=${documentType}`);
                       }
                     } else {
-                      setActiveView(item.view);
+                      // Document exists - go to edit
+                      router.push(`/web-presence/edit?type=${documentType}`);
                     }
                   }}
                 >
@@ -219,7 +238,7 @@ export function WebPresenceOverview() {
                           <button 
                             onClick={(e) => item.status === 'not_created' 
                               ? handleCreateDocument(e, item.id) 
-                              : handleEditDocument(e, item.view)
+                              : handleEditDocument(e, item.id)
                             }
                             className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded-lg text-sm text-white transition-colors group-hover:bg-white/10"
                           >

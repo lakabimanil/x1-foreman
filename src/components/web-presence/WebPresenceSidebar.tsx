@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   Globe,
@@ -9,7 +10,6 @@ import {
   Check,
   ArrowLeft,
   AlertCircle,
-  Lock,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useWebPresenceStore } from '@/store/useWebPresenceStore';
@@ -27,12 +27,20 @@ const viewConfig: Record<Exclude<ViewType, 'overview'>, {
   'landing-page': { icon: Layout, label: 'Landing Page', required: false },
 };
 
+// Map view keys to document types for the new flow
+const documentTypeMap: Record<string, string> = {
+  'privacy-policy': 'privacy-policy',
+  'terms': 'terms-of-service',
+};
+
 export function WebPresenceSidebar() {
+  const router = useRouter();
   const { 
     artifacts, 
     activeView, 
     setActiveView,
     moduleStatus,
+    generatedDocuments,
   } = useWebPresenceStore();
   
   const getStatusForView = (view: Exclude<ViewType, 'overview'>) => {
@@ -162,11 +170,33 @@ export function WebPresenceSidebar() {
           const Icon = config.icon;
           const isActive = activeView === viewKey;
           const status = getStatusForView(viewKey);
+          const documentType = documentTypeMap[viewKey];
+          
+          const handleClick = () => {
+            // For landing page, use the old flow (for now)
+            if (viewKey === 'landing-page') {
+              setActiveView(viewKey);
+              return;
+            }
+            
+            // For privacy policy and terms, use the new flow
+            if (documentType) {
+              const hasGeneratedDocument = generatedDocuments[documentType as keyof typeof generatedDocuments];
+              
+              if (status === 'not_created' && !hasGeneratedDocument) {
+                // New document - go to guided interview
+                router.push(`/web-presence/create?type=${documentType}`);
+              } else {
+                // Existing document - go to edit canvas
+                router.push(`/web-presence/edit?type=${documentType}`);
+              }
+            }
+          };
           
           return (
             <button
               key={viewKey}
-              onClick={() => setActiveView(viewKey)}
+              onClick={handleClick}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg mb-0.5 transition-all relative ${
                 isActive
                   ? 'bg-white/[0.06]'

@@ -4,17 +4,20 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { GuidedInterview, DocumentCanvas } from '@/components/web-presence';
 import { documentTemplates, getTemplate } from '@/config/interviewTemplates';
+import { useWebPresenceStore } from '@/store/useWebPresenceStore';
 import type { GeneratedDocument, DocumentSchema } from '@/types/documentBuilder';
 
 type FlowState = 
   | { step: 'select' }
   | { step: 'interview'; templateType: string }
-  | { step: 'canvas'; document: GeneratedDocument; schema: DocumentSchema };
+  | { step: 'canvas'; document: GeneratedDocument; schema: DocumentSchema; templateType: string };
 
 function CreateDocumentPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const templateType = searchParams.get('type');
+  
+  const { saveGeneratedDocument, setPrivacyStatus, setTermsStatus } = useWebPresenceStore();
   
   const [flowState, setFlowState] = useState<FlowState>(() => {
     if (templateType && documentTemplates[templateType]) {
@@ -104,7 +107,10 @@ function CreateDocumentPageContent() {
             contactEmail: 'privacy@calai.app',
           }}
           onComplete={(schema, document) => {
-            setFlowState({ step: 'canvas', document, schema });
+            // Save the document to the store immediately after interview
+            const docType = flowState.templateType as 'privacy-policy' | 'terms-of-service' | 'faq';
+            saveGeneratedDocument(docType, document, schema);
+            setFlowState({ step: 'canvas', document, schema, templateType: flowState.templateType });
           }}
           onCancel={() => router.push('/web-presence')}
         />
@@ -114,19 +120,32 @@ function CreateDocumentPageContent() {
   
   // Canvas + Chat Editor
   if (flowState.step === 'canvas') {
+    const handleSave = (doc: GeneratedDocument) => {
+      // Save the updated document to the store
+      const docType = flowState.templateType as 'privacy-policy' | 'terms-of-service' | 'faq';
+      saveGeneratedDocument(docType, doc, flowState.schema);
+      console.log('Document saved to store');
+    };
+    
+    const handlePublish = () => {
+      // Mark the artifact as ready
+      if (flowState.templateType === 'privacy-policy') {
+        setPrivacyStatus('ready');
+      } else if (flowState.templateType === 'terms-of-service') {
+        setTermsStatus('ready');
+      }
+      
+      console.log('Document published');
+      router.push('/web-presence');
+    };
+    
     return (
       <div className="h-screen">
         <DocumentCanvas
           document={flowState.document}
-          onSave={(doc) => {
-            console.log('Saved document:', doc);
-            // In production, this would save to the store/backend
-          }}
-          onBack={() => setFlowState({ step: 'select' })}
-          onPublish={() => {
-            console.log('Publishing document...');
-            // In production, this would trigger the publish flow
-          }}
+          onSave={handleSave}
+          onBack={() => router.push('/web-presence')}
+          onPublish={handlePublish}
         />
       </div>
     );

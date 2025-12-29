@@ -8,6 +8,7 @@ import type {
   TermsData,
   LandingPageData,
 } from '@/types/webPresence';
+import type { GeneratedDocument, DocumentSchema } from '@/types/documentBuilder';
 
 // Cal AI default data
 const defaultPrivacyPolicyData: PrivacyPolicyData = {
@@ -92,7 +93,17 @@ const defaultLandingPageData: LandingPageData = {
   },
 };
 
+// Store generated documents from the new flow
+interface GeneratedDocuments {
+  'privacy-policy'?: { document: GeneratedDocument; schema: DocumentSchema };
+  'terms-of-service'?: { document: GeneratedDocument; schema: DocumentSchema };
+  'faq'?: { document: GeneratedDocument; schema: DocumentSchema };
+}
+
 interface WebPresenceStore extends WebPresenceState {
+  // Generated documents from new flow
+  generatedDocuments: GeneratedDocuments;
+  
   // Navigation
   setActiveView: (view: WebPresenceState['activeView']) => void;
   togglePreview: () => void;
@@ -113,6 +124,10 @@ interface WebPresenceStore extends WebPresenceState {
   toggleEmailCapture: () => void;
   setLandingPageStatus: (status: WebArtifactStatus) => void;
   
+  // Generated document actions
+  saveGeneratedDocument: (type: keyof GeneratedDocuments, document: GeneratedDocument, schema: DocumentSchema) => void;
+  getGeneratedDocument: (type: keyof GeneratedDocuments) => { document: GeneratedDocument; schema: DocumentSchema } | undefined;
+  
   // Module status
   calculateModuleStatus: () => void;
   
@@ -123,6 +138,9 @@ interface WebPresenceStore extends WebPresenceState {
 export const useWebPresenceStore = create<WebPresenceStore>((set, get) => ({
   // Initial state
   moduleStatus: 'not_started',
+  
+  // Generated documents storage
+  generatedDocuments: {},
   
   artifacts: {
     privacyPolicy: {
@@ -306,6 +324,47 @@ export const useWebPresenceStore = create<WebPresenceStore>((set, get) => ({
     get().calculateModuleStatus();
   },
   
+  // Generated document actions
+  saveGeneratedDocument: (type, document, schema) => {
+    set((state) => {
+      // Also update the artifact status to 'draft' when a document is generated
+      let updatedArtifacts = { ...state.artifacts };
+      
+      if (type === 'privacy-policy') {
+        updatedArtifacts = {
+          ...updatedArtifacts,
+          privacyPolicy: {
+            ...updatedArtifacts.privacyPolicy,
+            status: 'draft',
+            lastUpdated: new Date(),
+          },
+        };
+      } else if (type === 'terms-of-service') {
+        updatedArtifacts = {
+          ...updatedArtifacts,
+          terms: {
+            ...updatedArtifacts.terms,
+            status: 'draft',
+            lastUpdated: new Date(),
+          },
+        };
+      }
+      
+      return {
+        generatedDocuments: {
+          ...state.generatedDocuments,
+          [type]: { document, schema },
+        },
+        artifacts: updatedArtifacts,
+      };
+    });
+    get().calculateModuleStatus();
+  },
+  
+  getGeneratedDocument: (type) => {
+    return get().generatedDocuments[type];
+  },
+  
   // Module status calculation
   calculateModuleStatus: () => {
     const { artifacts } = get();
@@ -339,6 +398,7 @@ export const useWebPresenceStore = create<WebPresenceStore>((set, get) => ({
   resetToDefaults: () => {
     set({
       moduleStatus: 'not_started',
+      generatedDocuments: {},
       artifacts: {
         privacyPolicy: {
           id: 'privacy-policy',
