@@ -1,3 +1,5 @@
+export * from './behaviors';
+
 export type BlockType = 'auth' | 'survey' | 'permission' | 'paywall' | 'video' | 'value-prop' | 'splash';
 
 export interface SurveyOption {

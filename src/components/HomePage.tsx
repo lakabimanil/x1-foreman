@@ -137,6 +137,23 @@ const AuthIcon = () => (
   </svg>
 );
 
+const BehaviorIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M12 2a4 4 0 014 4c0 1.1-.9 2-2 2h-4a2 2 0 01-2-2 4 4 0 014-4z"/>
+    <path d="M12 8v8"/>
+    <path d="M8 14l4 4 4-4"/>
+    <rect x="4" y="16" width="16" height="6" rx="2"/>
+  </svg>
+);
+
+const WebPresenceIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <circle cx="12" cy="12" r="10"/>
+    <line x1="2" y1="12" x2="22" y2="12"/>
+    <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+  </svg>
+);
+
 // Hardcoded data
 const project: Project = {
   name: 'Cal AI',
@@ -144,7 +161,7 @@ const project: Project = {
   description: 'AI-powered calorie tracking app that lets users scan food with their camera for instant nutritional information. Personalized diet plans and progress tracking to help users reach their health goals.',
   logo: '🍎',
   completedTasks: 5,
-  totalTasks: 11,
+  totalTasks: 14,
 };
 
 const modules: Module[] = [
@@ -169,6 +186,28 @@ const modules: Module[] = [
     completedTasks: 1,
     accentColor: '#4ADE80',
     href: '/builder',
+  },
+  {
+    id: 'behaviors',
+    title: 'AI Behavior Builder',
+    description: 'Configure AI behaviors with model selection, instructions, testing, and versioning.',
+    icon: <BehaviorIcon />,
+    status: 'ready',
+    totalTasks: 5,
+    completedTasks: 0,
+    accentColor: '#A78BFA',
+    href: '/behaviors',
+  },
+  {
+    id: 'web-presence',
+    title: 'Web Presence',
+    description: 'Everything your app needs on the web to ship and operate. Privacy policy, terms, and landing page.',
+    icon: <WebPresenceIcon />,
+    status: 'ready',
+    totalTasks: 3,
+    completedTasks: 0,
+    accentColor: '#F472B6',
+    href: '/web-presence',
   },
 ];
 

@@ -1,0 +1,10 @@
+export { OverviewTab } from './OverviewTab';
+export { ModelsTab } from './ModelsTab';
+export { InstructionsTab } from './InstructionsTab';
+export { InputsTab } from './InputsTab';
+export { OutputsTab } from './OutputsTab';
+export { ExamplesTab } from './ExamplesTab';
+export { TestsTab } from './TestsTab';
+export { VersionsTab } from './VersionsTab';
+export { DeployTab } from './DeployTab';
+export { default as BehaviorDetailClient } from './BehaviorDetailClient';

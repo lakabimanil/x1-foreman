@@ -30,11 +30,13 @@
   --apple-yellow: var(--color-accent-yellow);
   --apple-purple: var(--color-accent-purple);
   
-  /* Surface colors mapped to brand grays */
+  /* Default surfaces (app-wide). Behaviors overrides these via .behaviors-theme */
   --surface-dark: var(--color-gray-175);
   --surface-card: var(--color-gray-150);
   --surface-elevated: var(--color-gray-125);
   --border-subtle: var(--color-gray-125);
+  --border-strong: var(--color-gray-100);
+
   --text-primary: var(--color-base-white);
   --text-secondary: var(--color-gray-75);
   --text-tertiary: var(--color-gray-100);
@@ -52,6 +54,23 @@ body {
   background: var(--color-base-black);
   color: var(--text-primary);
   font-family: var(--font-sans);
+}
+
+/* ==========================================================================
+   Behaviors module theme (Apple-like, less “boxed”, more depth)
+   Apply by adding the `behaviors-theme` class to a wrapper element.
+   ========================================================================== */
+
+.behaviors-theme {
+  --surface-dark: #0B0B0C;
+  --surface-card: rgba(255, 255, 255, 0.06);
+  --surface-elevated: rgba(255, 255, 255, 0.09);
+  --border-subtle: rgba(255, 255, 255, 0.10);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  --text-primary: rgba(255, 255, 255, 0.98);
+  --text-secondary: rgba(255, 255, 255, 0.72);
+  --text-tertiary: rgba(255, 255, 255, 0.50);
 }
 
 /* Custom scrollbar */
