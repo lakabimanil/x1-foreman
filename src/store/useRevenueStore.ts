@@ -643,6 +643,7 @@ interface RevenueStore extends RevenueState {
   // Monetization Entry
   updateMonetizationSetup: (setup: Partial<MonetizationSetup>) => void;
   applyMonetizationSetup: (setup: MonetizationSetup) => void;
+  startFromScratch: () => void;
   resetMonetizationSetup: () => void;
   
   // UI State
@@ -1087,6 +1088,25 @@ export const useRevenueStore = create<RevenueStore>((set, get) => ({
     });
     
     showToast(`Monetization configured! ${generatedOffers.length} offers created.`);
+  },
+  
+  startFromScratch: () => {
+    set((state) => {
+      const scenario = state.scenarios[state.currentScenario];
+      return {
+        isMonetizationConfigured: true,
+        monetizationSetup: null,
+        activeView: 'offers',
+        scenarios: {
+          ...state.scenarios,
+          [state.currentScenario]: {
+            ...scenario,
+            offers: [], // Start with no offers
+          },
+        },
+      };
+    });
+    get().showToast('Starting from scratch. Add your first offer!');
   },
   
   resetMonetizationSetup: () => {
