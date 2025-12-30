@@ -4,6 +4,49 @@
 export type ScenarioType = 'cal-ai' | 'livestream';
 
 // ============================================================================
+// MONETIZATION ENTRY SETUP
+// ============================================================================
+
+export type MonetizationModel = 'subscription' | 'freemium' | 'free' | 'ads' | 'creator-subscription';
+
+export type ValueFrequency = 'habit-based' | 'somewhat' | 'mostly-one-time';
+export type CreatorPaymentAnswer = 'yes' | 'no' | 'not-sure';
+
+export interface PricingTier {
+  id: string;
+  amount: number;
+  period: 'week' | 'month' | 'year';
+  label: string;
+  isDefault?: boolean;
+  displayName?: string;
+}
+
+export interface MonetizationSetup {
+  recommendedModel: MonetizationModel;
+  pricing: PricingTier[];
+  trialEnabled: boolean;
+  trialDays: number;
+  assumptions: {
+    usersPerMonth: number;
+    conversionPct: number;
+    avgPrice: number;
+  };
+  answers: {
+    valueFrequency?: ValueFrequency;
+    creatorPayment?: CreatorPaymentAnswer;
+  };
+}
+
+export interface MonetizationRecommendation {
+  model: MonetizationModel;
+  modelLabel: string;
+  reasons: string[];
+  typicalRange: string;
+  defaultPricing: PricingTier[];
+  trialDefault: boolean;
+}
+
+// ============================================================================
 // OFFER TYPES - The core unit of Revenue
 // ============================================================================
 
@@ -531,7 +574,7 @@ export interface RevenueScenario {
 // STORE STATE
 // ============================================================================
 
-export type RevenueView = 'offers' | 'editor' | 'health' | 'money-map' | 'app-store' | 'edge-cases';
+export type RevenueView = 'offers' | 'editor' | 'health' | 'money-map' | 'app-store' | 'edge-cases' | 'monetization-entry';
 
 export interface RevenueState {
   currentScenario: ScenarioType;
@@ -544,9 +587,13 @@ export interface RevenueState {
   isAddingOffer: boolean;
   toastMessage: string | null;
   
-  // NEW
+  // Edge cases
   edgeCaseScenarios: EdgeCaseScenario[];
   selectedEdgeCaseId: string | null;
+  
+  // Monetization Entry
+  isMonetizationConfigured: boolean;
+  monetizationSetup: MonetizationSetup | null;
 }
 
 // ============================================================================

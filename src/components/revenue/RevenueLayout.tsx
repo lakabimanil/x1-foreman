@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { 
-  ArrowLeft, ShoppingBag, Heart, Eye, Check, FlaskConical, AlertTriangle
+  ArrowLeft, ShoppingBag, Heart, Eye, Check, FlaskConical, AlertTriangle, RotateCcw
 } from 'lucide-react';
 import { useRevenueStore } from '@/store/useRevenueStore';
 import OffersCanvas from './OffersCanvas';
@@ -14,6 +14,7 @@ import AppStoreReadiness from './AppStoreReadiness';
 import AddOfferModal from './AddOfferModal';
 import RevenueToast from './RevenueToast';
 import EdgeCaseSimulator from './EdgeCaseSimulator';
+import MonetizationEntryView from './MonetizationEntryView';
 
 // Updated IA with Edge Case Simulator
 import type { RevenueView } from '@/types/revenue';
@@ -43,6 +44,8 @@ export default function RevenueLayout() {
     setScenario,
     getHealthIssues,
     getCurrentScenario,
+    isMonetizationConfigured,
+    resetMonetizationSetup,
   } = useRevenueStore();
   
   const scenario = getCurrentScenario();
@@ -64,6 +67,69 @@ export default function RevenueLayout() {
     return (
       <div className="min-h-screen bg-gray-175 flex flex-col">
         <OfferEditor />
+        <RevenueToast />
+      </div>
+    );
+  }
+  
+  // Monetization Entry gate - show entry screen if not configured
+  if (!isMonetizationConfigured) {
+    return (
+      <div className="min-h-screen bg-black flex flex-col">
+        {/* Header */}
+        <header className="flex items-center justify-between px-4 py-3 border-b border-gray-125 bg-gray-175 flex-shrink-0">
+          <div className="flex items-center gap-4">
+            {/* Back to home */}
+            <Link
+              href="/"
+              className="flex items-center gap-2 text-gray-75 hover:text-white transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="text-sm">Home</span>
+            </Link>
+            
+            <div className="h-6 w-px bg-gray-125" />
+            
+            {/* Module title */}
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-accent-green/20 flex items-center justify-center">
+                <span className="text-base">💰</span>
+              </div>
+              <div>
+                <h1 className="text-sm font-semibold text-white">Monetization</h1>
+                <p className="text-[10px] text-gray-75">First-time setup</p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Center: Scenario Switcher */}
+          <div className="flex items-center gap-2 p-1 bg-gray-150 rounded-lg border border-gray-125">
+            {(['cal-ai', 'livestream'] as const).map((s) => (
+              <button
+                key={s}
+                onClick={() => setScenario(s)}
+                className={`
+                  px-3 py-1.5 rounded-md text-xs font-medium transition-all
+                  ${currentScenario === s 
+                    ? 'bg-white text-black' 
+                    : 'text-gray-75 hover:text-white'
+                  }
+                `}
+              >
+                {s === 'cal-ai' ? '🍎 Cal AI' : '📺 Livestream'}
+              </button>
+            ))}
+          </div>
+          
+          {/* Right: Empty space for balance */}
+          <div className="w-32" />
+        </header>
+        
+        {/* Main content - Entry view */}
+        <main className="flex-1 flex overflow-hidden bg-gray-175">
+          <MonetizationEntryView />
+        </main>
+        
         <RevenueToast />
       </div>
     );
@@ -220,7 +286,7 @@ export default function RevenueLayout() {
           )}
           
           {/* Footer info */}
-          <div className="p-4 border-t border-gray-125">
+          <div className="p-4 border-t border-gray-125 space-y-3">
             <div className="p-3 rounded-xl bg-gray-150 border border-gray-125">
               <p className="text-[10px] text-gray-100 uppercase tracking-wide mb-1">Current App</p>
               <p className="text-sm font-medium text-white flex items-center gap-2">
@@ -228,6 +294,15 @@ export default function RevenueLayout() {
                 {scenario.name}
               </p>
             </div>
+            
+            {/* Dev: Reset monetization setup */}
+            <button
+              onClick={resetMonetizationSetup}
+              className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs text-gray-100 hover:text-white hover:bg-gray-150 border border-dashed border-gray-125 transition-colors"
+            >
+              <RotateCcw className="w-3 h-3" />
+              Reset Monetization
+            </button>
           </div>
         </nav>
         

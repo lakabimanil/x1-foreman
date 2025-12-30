@@ -24,6 +24,8 @@ import type {
   PromoConfig,
   CreatorDeparturePolicy,
   EdgeCaseScenario,
+  MonetizationSetup,
+  PricingTier,
 } from '@/types/revenue';
 
 // ============================================================================
@@ -626,7 +628,7 @@ interface RevenueStore extends RevenueState {
   updateOfferPayout: (offerId: string, timing: PayoutTiming, holdDays?: number) => void;
   updateOfferRefund: (offerId: string, behavior: RefundBehavior, afterPayout?: RefundAfterPayout) => void;
   
-  // NEW: Edge case configuration
+  // Edge case configuration
   updateUnlockConditions: (offerId: string, conditions: UnlockCondition[], logic: UnlockLogic) => void;
   updateModerationPolicy: (offerId: string, policy: ModerationPolicy) => void;
   updateSubscriptionConfig: (offerId: string, config: SubscriptionConfig) => void;
@@ -637,6 +639,11 @@ interface RevenueStore extends RevenueState {
   // Edge case scenarios
   selectEdgeCase: (scenarioId: string | null) => void;
   simulateEdgeCase: (scenarioId: string) => { outcome: string; actions: string[] };
+  
+  // Monetization Entry
+  updateMonetizationSetup: (setup: Partial<MonetizationSetup>) => void;
+  applyMonetizationSetup: (setup: MonetizationSetup) => void;
+  resetMonetizationSetup: () => void;
   
   // UI State
   setAddingOffer: (adding: boolean) => void;
@@ -667,6 +674,10 @@ export const useRevenueStore = create<RevenueStore>((set, get) => ({
   toastMessage: null,
   edgeCaseScenarios: edgeCaseScenarios,
   selectedEdgeCaseId: null,
+  
+  // Monetization Entry - set to false to show entry screen first
+  isMonetizationConfigured: false,
+  monetizationSetup: null,
   
   // Navigation
   setActiveView: (view) => set({ activeView: view }),
@@ -883,6 +894,173 @@ export const useRevenueStore = create<RevenueStore>((set, get) => ({
       outcome: 'Configure the offer settings to see how this scenario would be handled',
       actions: ['Set up moderation policy', 'Configure subscription settings', 'Define refund behavior'],
     };
+  },
+  
+  // Monetization Entry
+  updateMonetizationSetup: (updates) => {
+    set((state) => ({
+      monetizationSetup: state.monetizationSetup 
+        ? { ...state.monetizationSetup, ...updates }
+        : null,
+    }));
+  },
+  
+  applyMonetizationSetup: (setup) => {
+    const { currentScenario, showToast } = get();
+    
+    // Generate offers based on scenario and setup
+    const generatedOffers: Offer[] = [];
+    
+    if (currentScenario === 'cal-ai') {
+      // Cal AI: Create Pro Subscription
+      const prices: PriceOption[] = setup.pricing.map((tier) => ({
+        id: tier.id,
+        amount: tier.amount,
+        period: tier.period,
+        label: tier.label,
+        isDefault: tier.isDefault,
+        hasFreeTrial: tier.isDefault && setup.trialEnabled,
+        freeTrialDays: setup.trialEnabled ? setup.trialDays : undefined,
+      }));
+      
+      generatedOffers.push({
+        id: 'cal-ai-pro-generated',
+        name: 'Cal AI Pro',
+        icon: '⭐',
+        type: 'subscription',
+        description: 'Premium subscription with all features unlocked',
+        status: 'ready',
+        isConfigured: true,
+        prices,
+        splits: [{ earner: 'platform', percentage: 100 }],
+        payoutTiming: 'monthly',
+        refundBehavior: 'full-revoke',
+        color: '#8B5CF6',
+        linkedToCreator: false,
+        subscriptionConfig: {
+          gracePeriod: { enabled: true, days: 7, accessDuringGrace: 'limited' },
+          billingRetry: { maxAttempts: 3, intervalDays: 3, notifyUser: true, notifyCreator: false },
+          planChanges: { allowMidCycle: true, prorateUpgrades: true, prorateDowngrades: false, immediateAccess: true },
+          cancellation: { allowImmediateCancel: true, retainAccessUntilPeriodEnd: true, offerPausInstead: true, pauseDurationOptions: [7, 14, 30], winbackOfferEnabled: true, winbackDiscountPercent: 20 },
+          sharing: { familySharingEnabled: false, maxFamilyMembers: 6 },
+        },
+      });
+    } else if (currentScenario === 'livestream') {
+      // Livestream: Create Subscribe to Creator + Tips + Superfan
+      const creatorPrices: PriceOption[] = setup.pricing.map((tier) => ({
+        id: tier.id,
+        amount: tier.amount,
+        period: tier.period,
+        label: tier.label,
+        displayName: tier.displayName,
+        isDefault: tier.isDefault,
+      }));
+      
+      generatedOffers.push({
+        id: 'subscribe-creator-generated',
+        name: 'Subscribe to Creator',
+        icon: '💜',
+        type: 'subscription',
+        description: 'Monthly subscription to support a specific creator',
+        status: 'ready',
+        isConfigured: true,
+        prices: creatorPrices,
+        splits: [
+          { earner: 'creator', percentage: 80 },
+          { earner: 'platform', percentage: 20 },
+        ],
+        payoutTiming: 'weekly',
+        refundBehavior: 'prorated',
+        refundAfterPayout: 'deduct-next',
+        creatorChurnBehavior: 'reroute-to-platform',
+        color: '#8B5CF6',
+        linkedToCreator: true,
+        subscriptionConfig: defaultSubscriptionConfig,
+        moderationPolicy: defaultModerationPolicy,
+        creatorDeparturePolicy: defaultCreatorDeparturePolicy,
+      });
+      
+      // Send a Tip
+      generatedOffers.push({
+        id: 'send-tip-generated',
+        name: 'Send a Tip',
+        icon: '⚡',
+        type: 'consumable',
+        description: 'One-time tips to show appreciation during streams',
+        status: 'ready',
+        isConfigured: true,
+        prices: [
+          { id: 'tip-1', amount: 1.00, period: 'one-time', label: '$1', displayName: 'Quick Tip' },
+          { id: 'tip-5', amount: 5.00, period: 'one-time', label: '$5', displayName: 'High Five 🙌', isDefault: true },
+          { id: 'tip-10', amount: 10.00, period: 'one-time', label: '$10', displayName: 'Super Fan ⭐' },
+        ],
+        splits: [
+          { earner: 'creator', percentage: 90 },
+          { earner: 'platform', percentage: 10 },
+        ],
+        payoutTiming: 'weekly',
+        refundBehavior: 'no-refund',
+        color: '#F59E0B',
+        linkedToCreator: true,
+      });
+      
+      // Superfan Membership
+      generatedOffers.push({
+        id: 'superfan-generated',
+        name: 'Superfan Membership',
+        icon: '⭐',
+        type: 'subscription',
+        description: 'Premium creator-linked membership with exclusive perks',
+        status: 'ready',
+        isConfigured: true,
+        prices: [
+          { id: 'superfan-monthly', amount: 4.99, period: 'month', label: '$4.99/month', isDefault: true },
+        ],
+        splits: [
+          { earner: 'creator', percentage: 50 },
+          { earner: 'platform', percentage: 50 },
+        ],
+        payoutTiming: 'weekly',
+        refundBehavior: 'prorated',
+        refundAfterPayout: 'deduct-next',
+        creatorChurnBehavior: 'reroute-to-platform',
+        color: '#EC4899',
+        linkedToCreator: true,
+        subscriptionConfig: defaultSubscriptionConfig,
+        moderationPolicy: defaultModerationPolicy,
+        creatorDeparturePolicy: defaultCreatorDeparturePolicy,
+      });
+    }
+    
+    // Update the store
+    set((state) => {
+      const scenario = state.scenarios[state.currentScenario];
+      return {
+        isMonetizationConfigured: true,
+        monetizationSetup: setup,
+        activeView: 'offers',
+        scenarios: {
+          ...state.scenarios,
+          [state.currentScenario]: {
+            ...scenario,
+            offers: generatedOffers,
+            suggestedOffers: currentScenario === 'cal-ai' 
+              ? calAISuggestedOffers 
+              : livestreamSuggestedOffers,
+          },
+        },
+      };
+    });
+    
+    showToast(`Monetization configured! ${generatedOffers.length} offers created.`);
+  },
+  
+  resetMonetizationSetup: () => {
+    set({
+      isMonetizationConfigured: false,
+      monetizationSetup: null,
+    });
+    get().showToast('Monetization reset — you can configure it again');
   },
   
   // UI State

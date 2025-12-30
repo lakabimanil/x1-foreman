@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: '/x1-foreman',
+  // basePath: '/x1-foreman', // Commented out for development
 };
 
 export default nextConfig;
