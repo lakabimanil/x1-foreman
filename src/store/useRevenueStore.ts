@@ -923,6 +923,17 @@ export const useRevenueStore = create<RevenueStore>((set, get) => ({
         freeTrialDays: setup.trialEnabled ? setup.trialDays : undefined,
       }));
       
+      // Determine refund behavior from answers
+      const refundBehavior = setup.answers.valueFrequency === 'full-refund' 
+        ? 'full-revoke' 
+        : setup.answers.valueFrequency === 'prorated' 
+        ? 'prorated' 
+        : 'no-refund';
+      
+      // Determine payment handling from answers
+      const hasGracePeriod = setup.answers.creatorPayment === 'grace-period';
+      const retryBilling = setup.answers.creatorPayment === 'retry-billing';
+      
       generatedOffers.push({
         id: 'cal-ai-pro-generated',
         name: 'Cal AI Pro',
@@ -934,12 +945,21 @@ export const useRevenueStore = create<RevenueStore>((set, get) => ({
         prices,
         splits: [{ earner: 'platform', percentage: 100 }],
         payoutTiming: 'monthly',
-        refundBehavior: 'full-revoke',
+        refundBehavior: refundBehavior as RefundBehavior,
         color: '#8B5CF6',
         linkedToCreator: false,
         subscriptionConfig: {
-          gracePeriod: { enabled: true, days: 7, accessDuringGrace: 'limited' },
-          billingRetry: { maxAttempts: 3, intervalDays: 3, notifyUser: true, notifyCreator: false },
+          gracePeriod: { 
+            enabled: hasGracePeriod, 
+            days: hasGracePeriod ? 7 : 0, 
+            accessDuringGrace: hasGracePeriod ? 'limited' : 'none' 
+          },
+          billingRetry: { 
+            maxAttempts: retryBilling ? 5 : 3, 
+            intervalDays: 3, 
+            notifyUser: true, 
+            notifyCreator: false 
+          },
           planChanges: { allowMidCycle: true, prorateUpgrades: true, prorateDowngrades: false, immediateAccess: true },
           cancellation: { allowImmediateCancel: true, retainAccessUntilPeriodEnd: true, offerPausInstead: true, pauseDurationOptions: [7, 14, 30], winbackOfferEnabled: true, winbackDiscountPercent: 20 },
           sharing: { familySharingEnabled: false, maxFamilyMembers: 6 },
@@ -956,6 +976,20 @@ export const useRevenueStore = create<RevenueStore>((set, get) => ({
         isDefault: tier.isDefault,
       }));
       
+      // Determine refund behavior from answers
+      const refundBehavior = setup.answers.valueFrequency === 'full-refund' 
+        ? 'full-revoke' 
+        : setup.answers.valueFrequency === 'prorated' 
+        ? 'prorated' 
+        : 'no-refund';
+      
+      // Determine payout timing from answers
+      const payoutTiming = setup.answers.creatorPayment === 'weekly' 
+        ? 'weekly' 
+        : setup.answers.creatorPayment === 'monthly' 
+        ? 'monthly' 
+        : 'instant';
+      
       generatedOffers.push({
         id: 'subscribe-creator-generated',
         name: 'Subscribe to Creator',
@@ -969,9 +1003,9 @@ export const useRevenueStore = create<RevenueStore>((set, get) => ({
           { earner: 'creator', percentage: 80 },
           { earner: 'platform', percentage: 20 },
         ],
-        payoutTiming: 'weekly',
-        refundBehavior: 'prorated',
-        refundAfterPayout: 'deduct-next',
+        payoutTiming: payoutTiming as PayoutTiming,
+        refundBehavior: refundBehavior as RefundBehavior,
+        refundAfterPayout: refundBehavior !== 'no-refund' ? 'deduct-next' : undefined,
         creatorChurnBehavior: 'reroute-to-platform',
         color: '#8B5CF6',
         linkedToCreator: true,
@@ -980,7 +1014,7 @@ export const useRevenueStore = create<RevenueStore>((set, get) => ({
         creatorDeparturePolicy: defaultCreatorDeparturePolicy,
       });
       
-      // Send a Tip
+      // Send a Tip (always no-refund, but uses payout timing)
       generatedOffers.push({
         id: 'send-tip-generated',
         name: 'Send a Tip',
@@ -998,13 +1032,13 @@ export const useRevenueStore = create<RevenueStore>((set, get) => ({
           { earner: 'creator', percentage: 90 },
           { earner: 'platform', percentage: 10 },
         ],
-        payoutTiming: 'weekly',
+        payoutTiming: payoutTiming as PayoutTiming,
         refundBehavior: 'no-refund',
         color: '#F59E0B',
         linkedToCreator: true,
       });
       
-      // Superfan Membership
+      // Superfan Membership (uses refund policy and payout timing)
       generatedOffers.push({
         id: 'superfan-generated',
         name: 'Superfan Membership',
@@ -1020,9 +1054,9 @@ export const useRevenueStore = create<RevenueStore>((set, get) => ({
           { earner: 'creator', percentage: 50 },
           { earner: 'platform', percentage: 50 },
         ],
-        payoutTiming: 'weekly',
-        refundBehavior: 'prorated',
-        refundAfterPayout: 'deduct-next',
+        payoutTiming: payoutTiming as PayoutTiming,
+        refundBehavior: refundBehavior as RefundBehavior,
+        refundAfterPayout: refundBehavior !== 'no-refund' ? 'deduct-next' : undefined,
         creatorChurnBehavior: 'reroute-to-platform',
         color: '#EC4899',
         linkedToCreator: true,

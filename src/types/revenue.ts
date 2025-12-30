@@ -9,8 +9,17 @@ export type ScenarioType = 'cal-ai' | 'livestream';
 
 export type MonetizationModel = 'subscription' | 'freemium' | 'free' | 'ads' | 'creator-subscription';
 
-export type ValueFrequency = 'habit-based' | 'somewhat' | 'mostly-one-time';
-export type CreatorPaymentAnswer = 'yes' | 'no' | 'not-sure';
+// Cal AI question answers (monetization configuration)
+export type CalAIQuestion1 = 'full-refund' | 'prorated' | 'no-refund'; // Refund policy
+export type CalAIQuestion2 = 'grace-period' | 'immediate-revoke' | 'retry-billing'; // Failed payment handling
+
+// Livestream question answers (monetization configuration)
+export type LivestreamQuestion1 = 'full-refund' | 'prorated' | 'no-refund'; // Refund policy
+export type LivestreamQuestion2 = 'weekly' | 'monthly' | 'instant'; // Payout timing
+
+// Generic types for backward compatibility
+export type ValueFrequency = CalAIQuestion1 | LivestreamQuestion1;
+export type CreatorPaymentAnswer = CalAIQuestion2 | LivestreamQuestion2;
 
 export interface PricingTier {
   id: string;

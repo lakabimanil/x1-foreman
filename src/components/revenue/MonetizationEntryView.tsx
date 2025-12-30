@@ -665,28 +665,54 @@ export default function MonetizationEntryView() {
             >
               <h3 className="text-sm font-medium text-white mb-4">Quick questions</h3>
               
-              <QuestionChips
-                question="Do users get ongoing value over time?"
-                options={[
-                  { value: 'habit-based', label: 'Habit-based' },
-                  { value: 'somewhat', label: 'Somewhat' },
-                  { value: 'mostly-one-time', label: 'Mostly one-time' },
-                ]}
-                selected={valueFrequency}
-                onChange={(v) => setValueFrequency(v as ValueFrequency)}
-              />
-              
-              {currentScenario === 'livestream' && (
-                <QuestionChips
-                  question="Will users pay creators directly?"
-                  options={[
-                    { value: 'yes', label: 'Yes' },
-                    { value: 'no', label: 'No' },
-                    { value: 'not-sure', label: 'Not sure yet' },
-                  ]}
-                  selected={creatorPayment}
-                  onChange={(v) => setCreatorPayment(v as CreatorPaymentAnswer)}
-                />
+              {currentScenario === 'cal-ai' ? (
+                <>
+                  <QuestionChips
+                    question="Will you offer refunds?"
+                    options={[
+                      { value: 'full-refund', label: 'Yes, full refunds' },
+                      { value: 'prorated', label: 'Prorated refunds only' },
+                      { value: 'no-refund', label: 'No refunds' },
+                    ]}
+                    selected={valueFrequency}
+                    onChange={(v) => setValueFrequency(v as ValueFrequency)}
+                  />
+                  
+                  <QuestionChips
+                    question="How should failed payments be handled?"
+                    options={[
+                      { value: 'grace-period', label: 'Grace period (keep access temporarily)' },
+                      { value: 'immediate-revoke', label: 'Immediate access revocation' },
+                      { value: 'retry-billing', label: 'Auto-retry billing multiple times' },
+                    ]}
+                    selected={creatorPayment}
+                    onChange={(v) => setCreatorPayment(v as CreatorPaymentAnswer)}
+                  />
+                </>
+              ) : (
+                <>
+                  <QuestionChips
+                    question="Will you offer refunds for creator subscriptions?"
+                    options={[
+                      { value: 'full-refund', label: 'Yes, full refunds' },
+                      { value: 'prorated', label: 'Prorated refunds only' },
+                      { value: 'no-refund', label: 'No refunds' },
+                    ]}
+                    selected={valueFrequency}
+                    onChange={(v) => setValueFrequency(v as ValueFrequency)}
+                  />
+                  
+                  <QuestionChips
+                    question="How quickly should creators get paid?"
+                    options={[
+                      { value: 'weekly', label: 'Weekly payouts' },
+                      { value: 'monthly', label: 'Monthly payouts' },
+                      { value: 'instant', label: 'Instant payouts (higher fees)' },
+                    ]}
+                    selected={creatorPayment}
+                    onChange={(v) => setCreatorPayment(v as CreatorPaymentAnswer)}
+                  />
+                </>
               )}
             </motion.div>
           </div>
