@@ -154,6 +154,13 @@ const WebPresenceIcon = () => (
   </svg>
 );
 
+const RevenueIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <line x1="12" y1="1" x2="12" y2="23"/>
+    <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+  </svg>
+);
+
 // Hardcoded data
 const project: Project = {
   name: 'Cal AI',
@@ -209,6 +216,17 @@ const modules: Module[] = [
     accentColor: '#F472B6',
     href: '/web-presence',
   },
+  {
+    id: 'revenue',
+    title: 'Revenue',
+    description: 'Configure app monetization with Money Map. Define subscriptions, IAP, splits, and payout rules.',
+    icon: <RevenueIcon />,
+    status: 'ready',
+    totalTasks: 4,
+    completedTasks: 0,
+    accentColor: '#10B981',
+    href: '/revenue',
+  },
 ];
 
 type FilterType = 'all' | 'in_progress' | 'done' | 'locked';
@@ -231,6 +249,12 @@ const Header = () => (
     </div>
 
     <div className="flex items-center gap-4">
+      <Link href="/ops" className="flex items-center gap-2 px-4 py-2 rounded-full border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 transition-colors">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <span className="text-sm">Platform Ops</span>
+      </Link>
       <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-125 text-white hover:bg-gray-150 transition-colors">
         <SettingsIcon />
         <span className="text-sm">Settings</span>

@@ -13,6 +13,7 @@ import {
   AlertCircle,
   Sparkles,
   ChevronRight,
+  Radio,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useWebPresenceStore } from '@/store/useWebPresenceStore';
@@ -373,6 +374,29 @@ export function WebPresenceSidebar() {
             activeView === 'admin' ? 'text-white/40' : 'text-white/20 group-hover:text-white/30'
           } ${activeView === 'admin' ? '' : 'group-hover:translate-x-0.5'}`} />
         </button>
+        
+        {/* Platform Ops - Links to separate module */}
+        <Link
+          href="/ops"
+          className="w-full flex items-center gap-3 px-3 py-3 rounded-xl mb-1 transition-all relative group hover:bg-white/[0.04]"
+        >
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors bg-white/[0.03] group-hover:bg-white/[0.06]">
+            <Radio className="w-4 h-4 text-rose-400" />
+          </div>
+          
+          <div className="flex-1 flex flex-col items-start min-w-0">
+            <span className="text-sm transition-colors truncate text-white/50 group-hover:text-white/70">
+              Platform Ops
+            </span>
+            <span className="text-[10px] text-white/30">
+              Full admin dashboard
+            </span>
+          </div>
+          
+          <span className="px-1.5 py-0.5 rounded-md bg-rose-500/80 text-[9px] font-bold text-white">
+            NEW
+          </span>
+        </Link>
       </nav>
       
       {/* Footer */}

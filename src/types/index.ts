@@ -1,4 +1,5 @@
 export * from './behaviors';
+export * from './revenue';
 
 export type BlockType = 'auth' | 'survey' | 'permission' | 'paywall' | 'video' | 'value-prop' | 'splash';
 
