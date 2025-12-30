@@ -180,8 +180,8 @@ function PricingTierCard({ tier, isSelected, onSelect, onPriceChange }: PricingT
       className={`
         group relative p-4 rounded-xl border-2 transition-all text-left w-full cursor-pointer
         ${isSelected 
-          ? 'bg-white/5 border-white' 
-          : 'bg-gray-150 border-gray-125 hover:border-gray-100'
+          ? 'bg-white/5 border-white shadow-lg shadow-white/10' 
+          : 'bg-gray-150 border-gray-125 hover:border-gray-100 opacity-60 hover:opacity-80'
         }
       `}
       whileHover={{ scale: 1.02 }}
@@ -537,9 +537,17 @@ export default function MonetizationEntryView() {
     currentScenario === 'cal-ai' ? 6 : 5 // Health apps see 5-8% conversion
   );
   
-  // Clarifying questions
-  const [valueFrequency, setValueFrequency] = useState<ValueFrequency | undefined>();
-  const [creatorPayment, setCreatorPayment] = useState<CreatorPaymentAnswer | undefined>();
+  // Clarifying questions - WITH DEFAULTS
+  const [valueFrequency, setValueFrequency] = useState<ValueFrequency | undefined>(
+    currentScenario === 'cal-ai' ? 'full-refund' : 'prorated' // Default refund policy
+  );
+  const [creatorPayment, setCreatorPayment] = useState<CreatorPaymentAnswer | undefined>(
+    currentScenario === 'cal-ai' ? 'grace-period' : 'weekly' // Default payment handling / payout timing
+  );
+  
+  // UI state
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [isSettingUp, setIsSettingUp] = useState(false);
   
   // Computed avg price from selected tier
   const avgPrice = useMemo(() => {
@@ -560,6 +568,8 @@ export default function MonetizationEntryView() {
   }, []);
   
   const handleSetup = () => {
+    setIsSettingUp(true);
+    
     const setup: MonetizationSetup = {
       recommendedModel: recommendation.model,
       pricing: pricing.map(t => ({ ...t, isDefault: t.id === selectedTierId })),
@@ -576,7 +586,11 @@ export default function MonetizationEntryView() {
       },
     };
     
-    applyMonetizationSetup(setup);
+    // Small delay to show loading state
+    setTimeout(() => {
+      applyMonetizationSetup(setup);
+      setIsSettingUp(false);
+    }, 800);
   };
   
   const handleCustomize = () => {
@@ -593,10 +607,10 @@ export default function MonetizationEntryView() {
           className="text-center mb-12"
         >
           <h1 className="text-3xl font-bold text-white mb-3">
-            How should this app make money?
+            Here's how this app will make money
           </h1>
           <p className="text-base text-gray-75 max-w-xl mx-auto">
-            Based on apps like yours, we'll recommend pricing and set it up automatically.
+            Based on apps like yours, we've chosen pricing and set it up automatically.
           </p>
         </motion.div>
         
@@ -614,7 +628,10 @@ export default function MonetizationEntryView() {
               transition={{ delay: 0.2 }}
               className="p-6 rounded-2xl bg-gray-150 border border-gray-125"
             >
-              <h3 className="text-sm font-medium text-white mb-4">Suggested pricing</h3>
+              <div className="mb-4">
+                <h3 className="text-sm font-medium text-white mb-1">Suggested pricing</h3>
+                <p className="text-xs text-gray-100">Most apps start with the highlighted tier. You can change this later.</p>
+              </div>
               
               <div className="grid grid-cols-3 gap-3 mb-5">
                 {pricing.map((tier) => (
@@ -663,7 +680,10 @@ export default function MonetizationEntryView() {
               transition={{ delay: 0.25 }}
               className="p-6 rounded-2xl bg-gray-150 border border-gray-125 space-y-5"
             >
-              <h3 className="text-sm font-medium text-white mb-4">Quick questions</h3>
+              <div className="mb-4">
+                <h3 className="text-sm font-medium text-white mb-1">Before we lock this in</h3>
+                <p className="text-xs text-gray-100">These only affect how money moves behind the scenes. Most apps use the defaults.</p>
+              </div>
               
               {currentScenario === 'cal-ai' ? (
                 <>
@@ -678,16 +698,38 @@ export default function MonetizationEntryView() {
                     onChange={(v) => setValueFrequency(v as ValueFrequency)}
                   />
                   
-                  <QuestionChips
-                    question="How should failed payments be handled?"
-                    options={[
-                      { value: 'grace-period', label: 'Grace period (keep access temporarily)' },
-                      { value: 'immediate-revoke', label: 'Immediate access revocation' },
-                      { value: 'retry-billing', label: 'Auto-retry billing multiple times' },
-                    ]}
-                    selected={creatorPayment}
-                    onChange={(v) => setCreatorPayment(v as CreatorPaymentAnswer)}
-                  />
+                  {/* Advanced options toggle */}
+                  <div>
+                    <button
+                      onClick={() => setShowAdvanced(!showAdvanced)}
+                      className="text-xs text-gray-100 hover:text-white transition-colors"
+                    >
+                      {showAdvanced ? '− ' : '+ '}Advanced (optional)
+                    </button>
+                    
+                    <AnimatePresence>
+                      {showAdvanced && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="mt-3"
+                        >
+                          <QuestionChips
+                            question="How should failed payments be handled?"
+                            options={[
+                              { value: 'grace-period', label: 'Grace period (keep access temporarily)' },
+                              { value: 'immediate-revoke', label: 'Immediate access revocation' },
+                              { value: 'retry-billing', label: 'Auto-retry billing multiple times' },
+                            ]}
+                            selected={creatorPayment}
+                            onChange={(v) => setCreatorPayment(v as CreatorPaymentAnswer)}
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </>
               ) : (
                 <>
@@ -702,16 +744,38 @@ export default function MonetizationEntryView() {
                     onChange={(v) => setValueFrequency(v as ValueFrequency)}
                   />
                   
-                  <QuestionChips
-                    question="How quickly should creators get paid?"
-                    options={[
-                      { value: 'weekly', label: 'Weekly payouts' },
-                      { value: 'monthly', label: 'Monthly payouts' },
-                      { value: 'instant', label: 'Instant payouts (higher fees)' },
-                    ]}
-                    selected={creatorPayment}
-                    onChange={(v) => setCreatorPayment(v as CreatorPaymentAnswer)}
-                  />
+                  {/* Advanced options toggle */}
+                  <div>
+                    <button
+                      onClick={() => setShowAdvanced(!showAdvanced)}
+                      className="text-xs text-gray-100 hover:text-white transition-colors"
+                    >
+                      {showAdvanced ? '− ' : '+ '}Advanced (optional)
+                    </button>
+                    
+                    <AnimatePresence>
+                      {showAdvanced && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="mt-3"
+                        >
+                          <QuestionChips
+                            question="How quickly should creators get paid?"
+                            options={[
+                              { value: 'weekly', label: 'Weekly payouts' },
+                              { value: 'monthly', label: 'Monthly payouts' },
+                              { value: 'instant', label: 'Instant payouts (higher fees)' },
+                            ]}
+                            selected={creatorPayment}
+                            onChange={(v) => setCreatorPayment(v as CreatorPaymentAnswer)}
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </>
               )}
             </motion.div>
@@ -789,22 +853,21 @@ export default function MonetizationEntryView() {
                   <Sparkles className="w-5 h-5 text-accent-green" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-white mb-1">What we'll set up for you</p>
-                  <ul className="text-xs text-gray-50 space-y-1">
+                  <p className="text-sm font-medium text-white mb-2">What we'll set up for you</p>
+                  <ul className="text-xs text-gray-50 space-y-1.5">
                     {currentScenario === 'cal-ai' ? (
                       <>
-                        <li>• Premium Subscription with {pricing.length} pricing tiers (weekly/monthly/yearly)</li>
-                        {trialEnabled && <li>• {trialDays}-day free trial on monthly plan</li>}
-                        <li>• AI-powered meal analysis & nutrition insights</li>
-                        <li>• Advanced macro tracking & goal customization</li>
-                        <li>• Apple-compliant auto-renewal & refund policies</li>
+                        <li>✔ Premium subscription ({pricing.length} pricing tiers)</li>
+                        {trialEnabled && <li>✔ {trialDays}-day free trial</li>}
+                        <li>✔ Automatic renewals & refund handling</li>
+                        <li>✔ App Store compliance built-in</li>
                       </>
                     ) : (
                       <>
-                        <li>• Creator subscriptions with {pricing.length} tiers</li>
-                        <li>• Tipping system ($1 / $5 / $10)</li>
-                        <li>• Superfan memberships</li>
-                        <li>• Creator payout splits (80/20 default)</li>
+                        <li>✔ Creator subscriptions ({pricing.length} tiers)</li>
+                        <li>✔ Tips during livestreams</li>
+                        <li>✔ Superfan memberships</li>
+                        <li>✔ Automatic payouts (80/20 split)</li>
                       </>
                     )}
                   </ul>
@@ -823,17 +886,32 @@ export default function MonetizationEntryView() {
         >
           <button
             onClick={handleCustomize}
-            className="px-6 py-3 rounded-xl text-sm font-medium text-gray-50 hover:text-white border border-gray-125 hover:border-gray-100 transition-colors"
+            disabled={isSettingUp}
+            className="px-6 py-3 rounded-xl text-sm font-medium text-gray-50 hover:text-white border border-gray-125 hover:border-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             I want to customize more
           </button>
           
           <button
             onClick={handleSetup}
-            className="group px-8 py-3 rounded-xl text-sm font-semibold bg-white text-black hover:bg-gray-25 transition-colors flex items-center gap-2"
+            disabled={isSettingUp}
+            className="group px-8 py-3 rounded-xl text-sm font-semibold bg-white text-black hover:bg-gray-25 transition-colors flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            Set this up for me
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            {isSettingUp ? (
+              <>
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  className="w-4 h-4 border-2 border-black border-t-transparent rounded-full"
+                />
+                Setting up pricing and payouts…
+              </>
+            ) : (
+              <>
+                Set this up for me
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+              </>
+            )}
           </button>
         </motion.div>
         
