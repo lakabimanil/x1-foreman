@@ -32,7 +32,7 @@ const initialState: ServicesStudioState = {
     avgUsage: 10,
     concurrency: 5,
   },
-  isLocked: false,
+  isReadyForBuild: false,
   connectFlow: {
     isOpen: false,
     serviceId: null,
