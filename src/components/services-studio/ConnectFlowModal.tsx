@@ -653,7 +653,7 @@ function AgentAssistStep({
                       </div>
                     ) : (
                       <button
-                        onClick={() => onUserAction(step.userAction.type, '')}
+                        onClick={() => onUserAction(step.userAction.type)}
                         className="px-4 py-2 rounded-lg bg-blue-500 text-white text-sm hover:bg-blue-600 transition-colors"
                       >
                         {step.userAction.label}
