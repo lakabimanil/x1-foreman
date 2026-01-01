@@ -161,6 +161,15 @@ const RevenueIcon = () => (
   </svg>
 );
 
+const ServicesIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <rect x="2" y="7" width="20" height="14" rx="2"/>
+    <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
+    <circle cx="9" cy="13" r="1"/>
+    <circle cx="15" cy="13" r="1"/>
+  </svg>
+);
+
 // Hardcoded data
 const project: Project = {
   name: 'Cal AI',
@@ -226,6 +235,17 @@ const modules: Module[] = [
     completedTasks: 0,
     accentColor: '#10B981',
     href: '/revenue',
+  },
+  {
+    id: 'services-studio',
+    title: 'Services Studio',
+    description: 'Configure production-ready services stack. Connect auth, video, data, analytics, and payments.',
+    icon: <ServicesIcon />,
+    status: 'ready',
+    totalTasks: 5,
+    completedTasks: 0,
+    accentColor: '#3B82F6',
+    href: '/services-studio',
   },
 ];
 
