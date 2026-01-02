@@ -16,6 +16,7 @@ interface Module {
   accentColor: string;
   href?: string;
   unlockMessage?: string;
+  backgroundImage?: string;
 }
 
 // Project info
@@ -42,38 +43,23 @@ const SettingsIcon = () => (
   </svg>
 );
 
+const HelpIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+    <line x1="12" y1="17" x2="12.01" y2="17"/>
+  </svg>
+);
+
 const ChevronDown = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <polyline points="6,9 12,15 18,9"/>
   </svg>
 );
 
-const ArrowRight = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <line x1="5" y1="12" x2="19" y2="12"/>
-    <polyline points="12,5 19,12 12,19"/>
-  </svg>
-);
-
 const PlayIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
     <polygon points="5,3 19,12 5,21"/>
-  </svg>
-);
-
-const SearchIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="11" cy="11" r="8"/>
-    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-  </svg>
-);
-
-const GridIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="3" y="3" width="7" height="7"/>
-    <rect x="14" y="3" width="7" height="7"/>
-    <rect x="14" y="14" width="7" height="7"/>
-    <rect x="3" y="14" width="7" height="7"/>
   </svg>
 );
 
@@ -88,66 +74,32 @@ const ListIcon = () => (
   </svg>
 );
 
-const MindMapIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="12" r="3"/>
-    <circle cx="4" cy="6" r="2"/>
-    <circle cx="20" cy="6" r="2"/>
-    <circle cx="4" cy="18" r="2"/>
-    <circle cx="20" cy="18" r="2"/>
-    <line x1="6" y1="6" x2="9.5" y2="10"/>
-    <line x1="18" y1="6" x2="14.5" y2="10"/>
-    <line x1="6" y1="18" x2="9.5" y2="14"/>
-    <line x1="18" y1="18" x2="14.5" y2="14"/>
-  </svg>
-);
-
-const CheckIcon = () => (
-  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-    <polyline points="20,6 9,17 4,12"/>
-  </svg>
-);
-
-const TaskListIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <line x1="8" y1="6" x2="21" y2="6"/>
-    <line x1="8" y1="12" x2="21" y2="12"/>
-    <line x1="8" y1="18" x2="21" y2="18"/>
-    <polyline points="3,6 4,7 6,5"/>
-    <polyline points="3,12 4,13 6,11"/>
-    <polyline points="3,18 4,19 6,17"/>
-  </svg>
-);
-
 // Module Icons
 const BrandIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="2" y="3" width="20" height="14" rx="2"/>
-    <path d="M8 21h8"/>
-    <path d="M12 17v4"/>
-    <path d="M7 8l3 3-3 3"/>
-    <path d="M13 8h4"/>
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M12 2l9 4.9V12c0 5.5-3.8 10.7-9 12-5.2-1.3-9-6.5-9-12V6.9L12 2z"/>
+    <path d="M12 12l-4-2 4-2 4 2-4 2z"/>
   </svg>
 );
 
 const AuthIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
-    <circle cx="12" cy="7" r="4"/>
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+    <circle cx="8.5" cy="7" r="4"/>
+    <line x1="20" y1="8" x2="20" y2="14"/>
+    <line x1="23" y1="11" x2="17" y2="11"/>
   </svg>
 );
 
 const BehaviorIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M12 2a4 4 0 014 4c0 1.1-.9 2-2 2h-4a2 2 0 01-2-2 4 4 0 014-4z"/>
-    <path d="M12 8v8"/>
-    <path d="M8 14l4 4 4-4"/>
-    <rect x="4" y="16" width="16" height="6" rx="2"/>
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <rect x="3" y="3" width="18" height="18" rx="2"/>
+    <path d="M9 9h6v6H9z"/>
   </svg>
 );
 
 const WebPresenceIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <circle cx="12" cy="12" r="10"/>
     <line x1="2" y1="12" x2="22" y2="12"/>
     <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
@@ -155,29 +107,27 @@ const WebPresenceIcon = () => (
 );
 
 const RevenueIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <line x1="12" y1="1" x2="12" y2="23"/>
     <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
   </svg>
 );
 
 const ServicesIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <rect x="2" y="7" width="20" height="14" rx="2"/>
     <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
-    <circle cx="9" cy="13" r="1"/>
-    <circle cx="15" cy="13" r="1"/>
   </svg>
 );
 
 // Hardcoded data
 const project: Project = {
   name: 'Cal AI',
-  tagline: 'Calorie tracking made easy.',
-  description: 'AI-powered calorie tracking app that lets users scan food with their camera for instant nutritional information. Personalized diet plans and progress tracking to help users reach their health goals.',
+  tagline: 'Food and macro counter',
+  description: 'A meta-search engine that aggregates perfume prices across retailers in real time so shoppers buy from the cheapest verified seller—no manual price hunting. Id ducimus galisum sit culpa consequuntur aut amet repellat sed minus harum aut rerum eveniet et necessitatibus eligendi.',
   logo: '🍎',
-  completedTasks: 5,
-  totalTasks: 14,
+  completedTasks: 0,
+  totalTasks: 4,
 };
 
 const modules: Module[] = [
@@ -186,76 +136,79 @@ const modules: Module[] = [
     title: 'Brand Studio',
     description: 'Design your app name, icon, screenshots, and App Store copy with AI assistance.',
     icon: <BrandIcon />,
-    status: 'done',
-    totalTasks: 5,
-    completedTasks: 5,
+    status: 'ready',
+    totalTasks: 4,
+    completedTasks: 1,
     accentColor: '#60A5FA',
     href: '/branding',
+    backgroundImage: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80',
   },
   {
     id: 'onboarding',
-    title: 'Build Onboarding Flow',
+    title: 'Onboarding Studio',
     description: 'Create beautiful onboarding screens with surveys, value props, permissions, and paywalls.',
     icon: <AuthIcon />,
-    status: 'in_progress',
+    status: 'ready',
     totalTasks: 4,
     completedTasks: 1,
     accentColor: '#4ADE80',
     href: '/builder',
+    backgroundImage: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80',
   },
   {
-    id: 'behaviors',
-    title: 'AI Behavior Builder',
-    description: 'Configure AI behaviors with model selection, instructions, testing, and versioning.',
-    icon: <BehaviorIcon />,
-    status: 'ready',
-    totalTasks: 5,
-    completedTasks: 0,
-    accentColor: '#A78BFA',
-    href: '/behaviors',
-  },
-  {
-    id: 'web-presence',
-    title: 'Web Presence',
-    description: 'Everything your app needs on the web to ship and operate. Privacy policy, terms, and landing page.',
-    icon: <WebPresenceIcon />,
-    status: 'ready',
-    totalTasks: 3,
-    completedTasks: 0,
-    accentColor: '#F472B6',
-    href: '/web-presence',
-  },
-  {
-    id: 'revenue',
-    title: 'Revenue',
+    id: 'pricing',
+    title: 'Revenue Studio',
     description: 'Configure app monetization with Money Map. Define subscriptions, IAP, splits, and payout rules.',
     icon: <RevenueIcon />,
     status: 'ready',
     totalTasks: 4,
-    completedTasks: 0,
-    accentColor: '#10B981',
+    completedTasks: 1,
+    accentColor: '#F59E0B',
     href: '/revenue',
+    backgroundImage: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=800&q=80',
+  },
+  {
+    id: 'behaviors',
+    title: 'Prompt Studio',
+    description: 'Customize your app\'s look and feel to ensure a consistent, recognizable brand experience.',
+    icon: <BehaviorIcon />,
+    status: 'ready',
+    totalTasks: 4,
+    completedTasks: 1,
+    accentColor: '#A78BFA',
+    href: '/behaviors',
+    backgroundImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80',
+  },
+  {
+    id: 'web-presence',
+    title: 'Web Studio',
+    description: 'Customize your app\'s look and feel to ensure a consistent, recognizable brand experience.',
+    icon: <WebPresenceIcon />,
+    status: 'ready',
+    totalTasks: 4,
+    completedTasks: 1,
+    accentColor: '#F472B6',
+    href: '/web-presence',
+    backgroundImage: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80',
   },
   {
     id: 'services-studio',
     title: 'Services Studio',
-    description: 'Configure production-ready services stack. Connect auth, video, data, analytics, and payments.',
+    description: 'Customize your app\'s look and feel to ensure a consistent, recognizable brand experience.',
     icon: <ServicesIcon />,
     status: 'ready',
-    totalTasks: 5,
-    completedTasks: 0,
+    totalTasks: 4,
+    completedTasks: 1,
     accentColor: '#3B82F6',
     href: '/services-studio',
+    backgroundImage: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80',
   },
 ];
 
-type FilterType = 'all' | 'in_progress' | 'done' | 'locked';
-type ViewType = 'card' | 'list' | 'mindmap';
-
 // Components
 const Header = () => (
-  <header className="flex items-center justify-between px-8 py-4 border-b border-gray-125">
-    <button className="flex items-center gap-2 text-gray-75 hover:text-white transition-colors">
+  <header className="flex items-center justify-between px-8 py-4 border-b border-[rgba(255,255,255,0.1)]">
+    <button className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <line x1="19" y1="12" x2="5" y2="12"/>
         <polyline points="12,19 5,12 12,5"/>
@@ -269,18 +222,16 @@ const Header = () => (
     </div>
 
     <div className="flex items-center gap-4">
-      <Link href="/ops" className="flex items-center gap-2 px-4 py-2 rounded-full border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 transition-colors">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        </svg>
-        <span className="text-sm">Platform Ops</span>
-      </Link>
-      <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-125 text-white hover:bg-gray-150 transition-colors">
+      <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-[rgba(255,255,255,0.1)] text-white hover:bg-[rgba(255,255,255,0.05)] transition-colors">
         <SettingsIcon />
         <span className="text-sm">Settings</span>
       </button>
-      <button className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-150 transition-colors">
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent-green to-accent-blue flex items-center justify-center text-xs font-bold">
+      <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-[rgba(255,255,255,0.1)] text-white hover:bg-[rgba(255,255,255,0.05)] transition-colors">
+        <HelpIcon />
+        <span className="text-sm">Help</span>
+      </button>
+      <button className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-[rgba(255,255,255,0.05)] transition-colors">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-xs font-bold">
           U
         </div>
         <span className="text-sm text-white">username</span>
@@ -290,412 +241,233 @@ const Header = () => (
   </header>
 );
 
-const PhoneMockup = () => (
-  <div className="relative w-44 h-72 flex-shrink-0">
-    {/* Phone frame */}
-    <div className="absolute inset-0 bg-white rounded-[2.5rem] border-4 border-gray-175 overflow-hidden shadow-2xl">
-      {/* Status bar */}
-      <div className="flex justify-between items-center px-6 pt-3 text-[10px] text-black">
-        <span>9:41</span>
-        <div className="w-20 h-6 bg-black rounded-full absolute left-1/2 -translate-x-1/2 top-2" />
-        <div className="flex gap-1">
-          <div className="w-4 h-2 border border-black rounded-sm relative">
-            <div className="absolute inset-0.5 bg-black rounded-sm" />
-          </div>
+const PhoneMockup = ({ screen }: { screen: number }) => {
+  const screens = [
+    // Screen 1: Empty/Splash
+    <div key="1" className="flex flex-col items-center justify-center h-full bg-white">
+      <div className="text-4xl mb-2">📸</div>
+    </div>,
+    // Screen 2: Goal question
+    <div key="2" className="flex flex-col h-full bg-white px-6 pt-12">
+      <button className="self-start mb-8">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2">
+          <polyline points="15,18 9,12 15,6"/>
+        </svg>
+      </button>
+      <h2 className="text-2xl font-bold text-black mb-2">What is your goal?</h2>
+      <p className="text-sm text-gray-500 mb-8">This helps us generate a plan for your calorie intake.</p>
+      <button className="w-full py-4 px-6 bg-gray-100 rounded-xl text-left">
+        <span className="text-black font-medium">Lose weight</span>
+      </button>
+    </div>,
+    // Screen 3: Dashboard
+    <div key="3" className="flex flex-col h-full bg-white px-6 pt-8">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <span className="text-xl">🍎</span>
+          <span className="font-bold text-black">Cal AI</span>
+        </div>
+        <div className="flex items-center gap-2 text-orange-500">
+          <span className="text-sm">🔥</span>
+          <span className="text-sm font-bold">1</span>
         </div>
       </div>
-      
-      {/* Content - Cal AI Splash Screen Style */}
-      <div className="flex flex-col items-center justify-center h-full pb-8 bg-white">
-        {/* Cal AI Logo/Text */}
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-black tracking-tight">Cal AI</h1>
-          <p className="text-[10px] text-gray-400 mt-1">Calorie tracking made easy</p>
+      <div className="flex gap-1 text-xs text-gray-400 mb-6">
+        {['W', 'T', 'F', 'S', 'S', 'M', 'T'].map((d, i) => (
+          <div key={i} className="flex-1 text-center">
+            <div>{d}</div>
+            <div className="text-black">{27 + i}</div>
+          </div>
+        ))}
+      </div>
+      <div className="text-center mb-6">
+        <div className="text-4xl font-bold text-black mb-1">1505</div>
+        <div className="text-sm text-gray-500">Calories left</div>
+      </div>
+      <div className="flex justify-around text-center">
+        <div>
+          <div className="text-lg font-bold text-black">129g</div>
+          <div className="text-xs text-gray-500">Protein</div>
+        </div>
+        <div>
+          <div className="text-lg font-bold text-black">247g</div>
+          <div className="text-xs text-gray-500">Carbs</div>
+        </div>
+        <div>
+          <div className="text-lg font-bold text-black">7g</div>
+          <div className="text-xs text-gray-500">Fat</div>
+        </div>
+      </div>
+    </div>,
+  ];
+
+  return (
+    <div className="relative w-44 h-72 flex-shrink-0">
+      {/* Phone frame */}
+      <div className="absolute inset-0 bg-black rounded-[2.5rem] border-[3px] border-gray-800 overflow-hidden shadow-2xl">
+        {/* Status bar */}
+        <div className="absolute top-0 left-0 right-0 flex justify-between items-center px-6 pt-2 text-[10px] z-10">
+          <span className="text-white">9:41</span>
+          <div className="w-20 h-5 bg-black rounded-full" />
+          <div className="flex gap-1 items-center">
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="white">
+              <rect width="16" height="12" rx="2" fill="none" stroke="white" strokeWidth="1"/>
+              <rect x="2" y="2" width="10" height="8" rx="1" fill="white"/>
+            </svg>
+          </div>
         </div>
         
-        {/* Food scanning illustration */}
-        <div className="mt-6 w-20 h-20 rounded-2xl bg-gray-100 flex items-center justify-center">
-          <div className="text-3xl">📸</div>
+        {/* Content */}
+        <div className="absolute inset-0 pt-8">
+          {screens[screen]}
         </div>
-        <p className="text-[9px] text-gray-400 mt-2">Scan food instantly</p>
+      </div>
+    </div>
+  );
+};
+
+const HeroSection = ({ project }: { project: Project }) => (
+  <div className="relative w-full mb-16">
+    {/* Background with gradient overlay */}
+    <div className="absolute inset-0 h-64 overflow-hidden rounded-3xl">
+      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&q=80')] bg-cover bg-center opacity-60" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black" />
+    </div>
+
+    {/* Content */}
+    <div className="relative pt-8 pb-16">
+      {/* iPhone mockups */}
+      <div className="flex items-center justify-center gap-6 mb-16">
+        <PhoneMockup screen={0} />
+        <PhoneMockup screen={1} />
+        <PhoneMockup screen={2} />
+      </div>
+
+      {/* App icon and title */}
+      <div className="flex items-start gap-8 max-w-5xl mx-auto px-8">
+        {/* App Icon */}
+        <div className="w-28 h-28 bg-gray-900 rounded-3xl flex items-center justify-center flex-shrink-0 border-4 border-gray-700">
+          <div className="text-5xl">🍎</div>
+        </div>
+
+        {/* Text content */}
+        <div className="flex-1">
+          <h1 className="text-4xl font-bold text-white mb-2">
+            {project.name} — {project.tagline}
+          </h1>
+          <p className="text-base text-gray-300 mb-1">Your daily dose of creative energy.</p>
+          <p className="text-sm text-gray-400 leading-relaxed max-w-3xl">
+            {project.description}
+          </p>
+        </div>
+
+        {/* Right section with progress and button */}
+        <div className="flex flex-col items-end gap-4">
+          <div className="text-right mb-2">
+            <div className="text-sm text-gray-400 mb-1">
+              {project.completedTasks}/{project.totalTasks} tasks completed
+            </div>
+            <div className="text-xs text-gray-500">Completing the unlocks the rest of the flow.</div>
+          </div>
+          <button className="flex items-center gap-2 px-6 py-3 rounded-xl bg-accent-green text-black font-semibold hover:bg-accent-green/90 transition-colors">
+            <PlayIcon />
+            <span>Start Building</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 );
 
-const ProjectCard = ({ project }: { project: Project }) => (
-  <motion.div 
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5 }}
-    className="bg-gray-150 rounded-2xl p-6 border border-gray-125"
-  >
-    <div className="flex gap-6">
-      {/* Phone mockup */}
-      <PhoneMockup />
-
-      {/* Main content */}
-      <div className="flex-1 flex flex-col">
-        {/* Header row */}
-        <div className="flex items-start justify-between mb-6">
-          <div>
-            <h1 className="text-3xl font-bold text-white">{project.name}</h1>
-            <p className="text-gray-75 mt-1">{project.tagline}</p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            {/* Recording indicator */}
-            <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
-            
-            <button className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-gray-125 text-white hover:bg-gray-125 transition-colors">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
-                <line x1="12" y1="18" x2="12" y2="18"/>
-              </svg>
-              <span className="text-sm">Launch Simulator</span>
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-gray-125 text-white hover:bg-gray-125 transition-colors">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                <polyline points="14,2 14,8 20,8"/>
-                <line x1="16" y1="13" x2="8" y2="13"/>
-                <line x1="16" y1="17" x2="8" y2="17"/>
-              </svg>
-              <span className="text-sm">Product Specs</span>
-            </button>
-            <button className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent-green text-black font-semibold hover:bg-accent-green/90 transition-colors">
-              <PlayIcon />
-              <span className="text-sm">Continue Building</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Bottom row */}
-        <div className="flex gap-4 mt-auto">
-          <div className="flex-1 bg-gray-175 rounded-xl p-4 border border-gray-125">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-white">Project Overview</h3>
-              <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-150 text-white text-xs hover:bg-gray-125 transition-colors border border-gray-125">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
-                  <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                </svg>
-                Edit
-              </button>
-            </div>
-            <p className="text-sm text-gray-75 leading-relaxed line-clamp-3">
-              {project.description}
-            </p>
-          </div>
-
-          <div className="w-56 bg-gray-175 rounded-xl p-4 border border-gray-125">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-medium text-white">Overall completion</h3>
-              <span className="text-sm text-gray-75">{project.completedTasks}/{project.totalTasks} Tasks</span>
-            </div>
-            <div className="h-2 bg-gray-150 rounded-full overflow-hidden">
-              <motion.div 
-                initial={{ width: 0 }}
-                animate={{ width: `${(project.completedTasks / project.totalTasks) * 100}%` }}
-                transition={{ duration: 1, delay: 0.5 }}
-                className="h-full bg-white rounded-full"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </motion.div>
-);
-
-const MilestoneCard = ({ module, index }: { module: Module; index: number }) => {
-  const isDone = module.status === 'done';
-  const isReady = module.status === 'ready';
-  const isInProgress = module.status === 'in_progress';
-  const isLocked = module.status === 'locked';
+const ModuleCard = ({ module, index }: { module: Module; index: number }) => {
   const progress = (module.completedTasks / module.totalTasks) * 100;
-
-  const getStatusBadge = () => {
-    if (isDone) {
-      return (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent-green/20 text-accent-green text-xs font-medium">
-          Done
-        </span>
-      );
-    }
-    if (isReady || isInProgress) {
-      return (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent-green/20 text-accent-green text-xs font-medium">
-          Ready
-        </span>
-      );
-    }
-    if (isLocked) {
-      return (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-175 text-gray-75 text-xs font-medium">
-          Locked
-        </span>
-      );
-    }
-    return null;
-  };
-
-  const getActionButton = () => {
-    if (isDone) {
-      return (
-        <Link href={module.href || '#'}>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-125 text-white hover:bg-gray-125 transition-colors text-sm">
-            View Milestone
-            <ArrowRight />
-          </button>
-        </Link>
-      );
-    }
-    if (isReady || isInProgress) {
-      return (
-        <Link href={module.href || '#'}>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-125 text-white hover:bg-gray-125 transition-colors text-sm">
-            Open Milestone
-            <ArrowRight />
-          </button>
-        </Link>
-      );
-    }
-    if (isLocked) {
-      return (
-        <button disabled className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-125 text-gray-100 cursor-not-allowed text-sm opacity-50">
-          Open Milestone
-          <ArrowRight />
-        </button>
-      );
-    }
-    return (
-      <Link href={module.href || '#'}>
-        <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-125 text-white hover:bg-gray-125 transition-colors text-sm">
-          Start
-          <ArrowRight />
-        </button>
-      </Link>
-    );
-  };
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.1 * index }}
-      className={`bg-gray-150 rounded-2xl p-6 border border-gray-125 flex flex-col ${isLocked ? 'opacity-60' : ''}`}
+      transition={{ duration: 0.4, delay: 0.05 * index }}
+      className="relative h-[334px] rounded-xl overflow-hidden bg-[#0d0d0d]"
     >
-      {/* Header */}
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-4">
-          {/* Avatar/Icon */}
-          <div 
-            className="w-14 h-14 rounded-full flex items-center justify-center text-2xl font-bold"
-            style={{ backgroundColor: module.accentColor + '33', color: module.accentColor }}
-          >
-            {module.title.charAt(0)}
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold text-white">
-              Milestone {index + 1}: {module.title}
-            </h3>
-            <p className="text-sm text-gray-75 mt-1 line-clamp-2">
-              {module.description}
-            </p>
-          </div>
-        </div>
-        {getStatusBadge()}
+      {/* Background image with overlay */}
+      <div className="absolute inset-0">
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-30"
+          style={{ backgroundImage: `url(${module.backgroundImage})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0d0d0d]" />
       </div>
 
-      {/* Progress bar */}
-      <div className="mt-auto">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="flex-1 h-1.5 bg-gray-175 rounded-full overflow-hidden">
-            <motion.div 
-              initial={{ width: 0 }}
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="h-full rounded-full"
-              style={{ backgroundColor: module.accentColor }}
-            />
+      {/* Icon in top-left */}
+      <div className="absolute top-8 left-8 w-10 h-10 rounded-xl bg-gray-200 flex items-center justify-center text-gray-800">
+        {module.icon}
+      </div>
+
+      {/* Content */}
+      <div className="absolute bottom-0 left-0 right-0 p-8 flex flex-col gap-14">
+        {/* Title and description */}
+        <div>
+          <h3 className="text-[22px] font-medium text-white mb-2.5 tracking-tight">
+            {module.title}
+          </h3>
+          <p className="text-sm text-white/60 leading-5">
+            {module.description}
+          </p>
+        </div>
+
+        {/* Progress and actions */}
+        <div className="flex flex-col gap-5">
+          {/* Progress bar and text */}
+          <div className="flex items-center justify-between">
+            <div className="flex-1 max-w-md h-2.5 bg-white/10 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-white/20 rounded-full transition-all duration-500"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <span className="text-white font-medium ml-6">
+              {module.completedTasks}/{module.totalTasks} Tasks
+            </span>
           </div>
-          <span className="text-xs text-gray-75 flex-shrink-0">
-            {module.completedTasks}/{module.totalTasks} Tasks
-          </span>
-        </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-3 mt-4">
-          {getActionButton()}
-          <button className="w-10 h-10 rounded-full border border-gray-125 flex items-center justify-center text-gray-75 hover:bg-gray-125 hover:text-white transition-colors">
-            <TaskListIcon />
-          </button>
+          {/* Action buttons */}
+          <div className="flex items-center gap-3">
+            <Link href={module.href || '#'} className="flex-1">
+              <button className="w-full h-12 px-6 bg-white border border-white/10 rounded-xl text-black font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center">
+                {module.title.includes('Brand Studio') ? 'Open Brand Studio' : 
+                 module.title.includes('Onboarding Studio') ? 'Open Onboarding Studio' :
+                 module.title.includes('Revenue Studio') ? 'Open Revenue Studio' :
+                 module.title.includes('Prompt Studio') ? 'Open Prompt Studio' :
+                 module.title.includes('Web Studio') ? 'Open Web Studio' :
+                 module.title.includes('Services Studio') ? 'Open Services Studio' :
+                 'Open Module'}
+              </button>
+            </Link>
+            <button className="w-12 h-12 bg-[#1b1b1b] border border-white/10 rounded-xl flex items-center justify-center text-white hover:bg-[#252525] transition-colors flex-shrink-0">
+              <ListIcon />
+            </button>
+          </div>
         </div>
-
-        {/* Unlock message */}
-        {isLocked && module.unlockMessage && (
-          <p className="text-xs text-gray-100 mt-3">{module.unlockMessage}</p>
-        )}
       </div>
     </motion.div>
   );
 };
 
-const ViewDropdown = ({ view, setView }: { view: ViewType; setView: (v: ViewType) => void }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className="relative">
-      <button 
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-125 text-white hover:bg-gray-125 transition-colors"
-      >
-        <GridIcon />
-        <span className="text-sm">Card View</span>
-        <ChevronDown />
-      </button>
-
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="absolute right-0 top-full mt-2 w-48 bg-gray-150 border border-gray-125 rounded-xl overflow-hidden shadow-xl z-50"
-          >
-            <button
-              onClick={() => { setView('card'); setIsOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-125 transition-colors ${view === 'card' ? 'text-white' : 'text-gray-75'}`}
-            >
-              <GridIcon />
-              <span className="text-sm">Card View</span>
-              {view === 'card' && <CheckIcon />}
-            </button>
-            <button
-              onClick={() => { setView('list'); setIsOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-125 transition-colors ${view === 'list' ? 'text-white' : 'text-gray-75'}`}
-            >
-              <ListIcon />
-              <span className="text-sm">List View</span>
-              {view === 'list' && <CheckIcon />}
-            </button>
-            <button
-              onClick={() => { setView('mindmap'); setIsOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-125 transition-colors ${view === 'mindmap' ? 'text-white' : 'text-gray-75'}`}
-            >
-              <MindMapIcon />
-              <span className="text-sm">Hybrid Mind Map</span>
-              {view === 'mindmap' && <CheckIcon />}
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-};
-
 export default function HomePage() {
-  const [filter, setFilter] = useState<FilterType>('all');
-  const [view, setView] = useState<ViewType>('card');
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const filteredModules = modules.filter(module => {
-    // Search filter
-    if (searchQuery && !module.title.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
-    }
-    // Status filter
-    if (filter === 'all') return true;
-    if (filter === 'in_progress') return module.status === 'in_progress' || module.status === 'ready';
-    if (filter === 'done') return module.status === 'done';
-    if (filter === 'locked') return module.status === 'locked';
-    return true;
-  });
-
-  const filterTabs: { id: FilterType; label: string }[] = [
-    { id: 'all', label: 'All' },
-    { id: 'in_progress', label: 'In progress' },
-    { id: 'done', label: 'Done' },
-    { id: 'locked', label: 'Locked' },
-  ];
-
   return (
     <div className="min-h-screen bg-black">
       <Header />
 
-      <main className="max-w-7xl mx-auto px-8 py-8">
-        {/* Project Card */}
-        <ProjectCard project={project} />
+      <main className="max-w-[1720px] mx-auto px-8 py-8">
+        {/* Hero Section */}
+        <HeroSection project={project} />
 
-        {/* Project Milestone Section */}
-        <motion.section 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="mt-12"
-        >
-          {/* Section Header */}
-          <div className="flex items-start justify-between mb-8">
-            <div>
-              <h2 className="text-2xl font-bold text-white">Project Milestone</h2>
-              <p className="text-gray-75 mt-1">
-                Modules generated from your product specifications with real-time progress tracking.
-              </p>
-            </div>
-          </div>
-
-          {/* Filters and Search */}
-          <div className="flex items-center justify-between mb-6">
-            {/* Search */}
-            <div className="w-64 pl-10 pr-4 py-2.5 bg-gray-175 border border-gray-125 rounded-full text-white placeholder-gray-75 relative">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-75">
-                <SearchIcon />
-              </div>
-              <input
-                type="text"
-                placeholder="Search modules..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent focus:outline-none text-sm"
-              />
-            </div>
-
-            {/* Filter Tabs */}
-            <div className="flex items-center gap-2">
-              {filterTabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setFilter(tab.id)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    filter === tab.id
-                      ? 'bg-white text-black'
-                      : 'bg-gray-175 text-gray-75 hover:text-white border border-gray-125'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            {/* View Toggle */}
-            <ViewDropdown view={view} setView={setView} />
-          </div>
-
-          {/* Milestone Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredModules.map((module, index) => (
-              <MilestoneCard key={module.id} module={module} index={index} />
-            ))}
-          </div>
-
-          {/* Empty state */}
-          {filteredModules.length === 0 && (
-            <div className="text-center py-16">
-              <p className="text-gray-75">No modules found matching your criteria.</p>
-            </div>
-          )}
-        </motion.section>
+        {/* Module Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {modules.map((module, index) => (
+            <ModuleCard key={module.id} module={module} index={index} />
+          ))}
+        </div>
       </main>
     </div>
   );

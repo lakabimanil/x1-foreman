@@ -24,6 +24,7 @@ export default function ServiceDetailPage() {
   }, [initializeFromStorage]);
 
   useEffect(() => {
+    // Redirect to main page if no template selected
     if (selectedTemplate === null) {
       router.push('/services-studio');
     }
